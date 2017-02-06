@@ -33,6 +33,7 @@
                     android:hint="Job Title">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
@@ -47,6 +48,7 @@
                     android:hint="Job Description">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -84,6 +86,7 @@
                     android:hint="Location">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
@@ -98,6 +101,7 @@
                     android:hint="Fee (PHP)">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_fee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
@@ -130,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
-                        android:onClick="@{() -> view.onDateStart()}" />
+                        android:onClick="@{(theView) -> view.onSetDate(theView)}" />
 
                     <TextView
                         android:id="@+id/txt_to"
@@ -144,7 +148,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
-                        android:onClick="@{() -> view.onDateEnd()}" />
+                        android:onClick="@{(theView) -> view.onSetDate(theView)}" />
 
                 </LinearLayout>
 

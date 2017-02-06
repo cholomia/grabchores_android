@@ -1,5 +1,7 @@
 package com.tip.theboss.util;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class DateTimeUtils {
+
+    public static final String DATE_ONLY = "MM/dd/yy";
 
     private static final List<Long> times = Arrays.asList(
             TimeUnit.DAYS.toMillis(365),
@@ -55,6 +59,35 @@ public class DateTimeUtils {
     public static String getLongDateTimeString(Date date) {
         if (date == null) return "";
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(date);
+    }
+
+    public static Calendar convertTransactionStringDate(String dateString, String format) {
+        Date date = convertStringDate(dateString, format);
+        if (date == null) return null;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+    }
+
+    public static Date convertStringDate(String dateString, String format) {
+        Date date = null;
+        try {
+            date = getSimpleDateFormat(format).parse(dateString);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.d("dateString: ", dateString + "");
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static SimpleDateFormat getSimpleDateFormat(String format) {
+        return new SimpleDateFormat(format, Locale.ENGLISH);
+    }
+
+    public static String convertDateToString(String format, Calendar calendar) {
+        if (calendar == null) return "";
+        return getSimpleDateFormat(format).format(calendar.getTime());
     }
 
 }

@@ -9,7 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -29,8 +32,25 @@ import java.util.Map;
 public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPresenter>
         implements JobListView, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String ARG_SEARCH = "arg_search";
+    private static final String ARG_CLASSIFICATION = "arg_classification";
+
     private FragmentJobListBinding binding;
     private JobListAdapter adapter;
+    private boolean hasSearch;
+    private int classification;
+
+    public JobListFragment() {
+    }
+
+    public static JobListFragment newInstance(boolean hasSearch, int classification) {
+        JobListFragment jobListFragment = new JobListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_SEARCH, hasSearch);
+        args.putInt(ARG_CLASSIFICATION, classification);
+        jobListFragment.setArguments(args);
+        return jobListFragment;
+    }
 
     @NonNull
     @Override
@@ -42,6 +62,11 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        if (getArguments() != null) {
+            hasSearch = getArguments().getBoolean(ARG_SEARCH, false);
+            classification = getArguments().getInt(ARG_CLASSIFICATION, -1);
+        }
+        if (hasSearch) setHasOptionsMenu(true);
     }
 
     @Override
@@ -53,6 +78,18 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.onStart(classification);
+    }
+
+    @Override
+    public void onStop() {
+        presenter.onStop();
+        super.onStop();
     }
 
     @NonNull
@@ -71,6 +108,25 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
                 onRefresh();
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_job_list, menu);
+        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                presenter.setQuery(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

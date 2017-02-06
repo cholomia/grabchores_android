@@ -22,6 +22,11 @@ public class ProfileFragment extends MvpFragment<ProfileView, ProfilePresenter>
 
     private FragmentProfileBinding binding;
 
+    public ProfileFragment() {
+    }
+
+    //public ProfileF/
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);

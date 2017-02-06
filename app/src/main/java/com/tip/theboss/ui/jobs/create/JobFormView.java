@@ -1,5 +1,7 @@
 package com.tip.theboss.ui.jobs.create;
 
+import android.view.View;
+
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 /**
@@ -11,7 +13,13 @@ public interface JobFormView extends MvpView {
 
     void onPost();
 
-    void onDateStart();
+    void onSetDate(View view);
 
-    void onDateEnd();
+    void showMessage(String message);
+
+    void startLoading();
+
+    void stopLoading();
+
+    void onCreateSuccess();
 }

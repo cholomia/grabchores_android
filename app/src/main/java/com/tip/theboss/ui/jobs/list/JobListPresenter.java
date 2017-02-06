@@ -9,6 +9,7 @@ import com.tip.theboss.model.data.User;
 import com.tip.theboss.model.response.JobListResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ import retrofit2.Response;
  * @since 26/01/2017
  */
 
-public class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
+class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
 
     private static final String TAG = JobListPresenter.class.getSimpleName();
 
@@ -36,8 +37,10 @@ public class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
     private User user;
 
     private String query;
+    private int classification;
 
-    void onStart() {
+    void onStart(int classification) {
+        this.classification = classification;
         realm = Realm.getDefaultInstance();
         user = realm.where(User.class).findFirst();
         jobRealmResults = realm.where(Job.class).findAllSortedAsync("created", Sort.DESCENDING);
@@ -49,41 +52,56 @@ public class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
         });
     }
 
-    public void setQuery(String query) {
-        this.query = query;
-        filterList();
-    }
-
-    private void filterList() {
-        if (jobRealmResults.isLoaded() && jobRealmResults.isValid()) {
-            List<Job> jobs;
-            if (query !=null && !query.isEmpty()) {
-                jobs = realm.copyFromRealm(jobRealmResults.where()
-                        .contains("title", query, Case.INSENSITIVE)
-                        .or()
-                        .contains("description", query, Case.INSENSITIVE)
-                        .findAll());
-            } else {
-                jobs = realm.copyFromRealm(jobRealmResults);
-            }
-            getView().setJobs(jobs);
-        }
-    }
-
     void onStop() {
         jobRealmResults.removeChangeListeners();
         realm.close();
     }
 
+    void setQuery(String query) {
+        this.query = query;
+        filterList();
+        refresh();
+    }
+
+    private void filterList() {
+        if (jobRealmResults.isLoaded() && jobRealmResults.isValid()) {
+            RealmResults<Job> jobFilterRealmResults = jobRealmResults;
+            if (query != null && !query.isEmpty()) {
+                jobFilterRealmResults = jobFilterRealmResults.where()
+                        .contains("title", query, Case.INSENSITIVE)
+                        .or()
+                        .contains("description", query, Case.INSENSITIVE)
+                        .findAll();
+            }
+            if (classification != -1) {
+                jobFilterRealmResults = jobFilterRealmResults.where()
+                        .equalTo("classificationId", classification)
+                        .findAll();
+            }
+            List<Job> jobs = realm.copyFromRealm(jobFilterRealmResults);
+            getView().setJobs(jobs);
+        }
+    }
+
     void refresh() {
-        load(App.getInstance().getApiInterface().jobs(Credentials.basic(user.getUsername(), user.getPassword())));
+        Map<String, String> parameters = new HashMap<>();
+        if (query != null && !query.isEmpty()) {
+            parameters.put("title", query);
+            parameters.put("description", query);
+        }
+        if (classification != -1) {
+            parameters.put("classification", classification + "");
+        }
+        if (parameters.isEmpty())
+            load(App.getInstance().getApiInterface().jobs(Credentials.basic(user.getUsername(), user.getPassword())));
+        else refresh(parameters);
     }
 
     void refresh(Map<String, String> params) {
         load(App.getInstance().getApiInterface().jobs(Credentials.basic(user.getUsername(), user.getPassword()), params));
     }
 
-    void load(Call<JobListResponse> jobListResponseCall) {
+    private void load(Call<JobListResponse> jobListResponseCall) {
         jobListResponseCall.enqueue(new Callback<JobListResponse>() {
             @Override
             public void onResponse(Call<JobListResponse> call, final Response<JobListResponse> response) {
@@ -128,4 +146,6 @@ public class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
             }
         });
     }
+
+
 }

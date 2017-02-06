@@ -17,4 +17,12 @@ public interface JobDetailView extends MvpView {
     void onApply(Job job);
 
     void setJob(Job job);
+
+    void startLoading();
+
+    void stopLoading();
+
+    void showMessage(String message);
+
+    void onApplySuccess();
 }

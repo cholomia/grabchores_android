@@ -27,7 +27,8 @@
             android:name=".ui.menu.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.jobs.detail.JobDetailActivity"></activity>
+        <activity android:name=".ui.jobs.detail.JobDetailActivity" />
+        <activity android:name=".ui.jobs.list.JobListActivity"></activity>
     </application>
 
 </manifest>

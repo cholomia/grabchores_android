@@ -17,4 +17,5 @@ public class Endpoints {
     public static final String REGISTER = "user/register/";
 
     public static final String JOBS = "jobs/";
+    public static final String JOB_APPLICATION = JOBS + "application/";
 }

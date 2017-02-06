@@ -1,5 +1,6 @@
 package com.tip.theboss.ui.menu;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.tip.theboss.R;
 import com.tip.theboss.databinding.ActivityMainBinding;
+import com.tip.theboss.ui.jobs.list.JobListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         binding.tabs.setupWithViewPager(binding.container);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -53,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_search:
+                Intent intent = new Intent(this, JobListActivity.class);
+                intent.putExtra("has_search", true);
+                startActivity(intent);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

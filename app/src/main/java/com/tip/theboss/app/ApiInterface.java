@@ -1,6 +1,8 @@
 package com.tip.theboss.app;
 
+import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
+import com.tip.theboss.model.pojo.JobApplication;
 import com.tip.theboss.model.response.JobListResponse;
 import com.tip.theboss.model.response.LoginResponse;
 
@@ -40,5 +42,22 @@ public interface ApiInterface {
     @GET(Endpoints.JOBS)
     Call<JobListResponse> jobs(@Header("Authorization") String basicAuthentication,
                                @QueryMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST(Endpoints.JOBS)
+    Call<Job> createJob(@Header("Authorization") String basicAuthentication,
+                        @Field("title") String title,
+                        @Field("description") String description,
+                        @Field("classification") int classificationId,
+                        @Field("location") String location,
+                        @Field("fee") double fee,
+                        @Field("date_start") String dateStart,
+                        @Field("date_end") String dateEnd);
+
+    @FormUrlEncoded
+    @POST(Endpoints.JOB_APPLICATION)
+    Call<JobApplication> apply(@Header("Authorization") String basicAuthentication,
+                               @Field("job_id") int jobId);
 
 }
