@@ -2,12 +2,16 @@ package com.tip.theboss.ui.jobs.create;
 
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 import com.tip.theboss.app.App;
+import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
 
 import java.io.IOException;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,24 +26,83 @@ class JobFormPresenter extends MvpNullObjectBasePresenter<JobFormView> {
 
     private Realm realm;
     private User user;
+    private RealmResults<Classification> classificationRealmResults;
 
     void onStart() {
         realm = Realm.getDefaultInstance();
         user = realm.where(User.class).findFirst();
+        classificationRealmResults = realm.where(Classification.class).findAllAsync();
+        classificationRealmResults.addChangeListener(new RealmChangeListener<RealmResults<Classification>>() {
+            @Override
+            public void onChange(RealmResults<Classification> element) {
+                if (classificationRealmResults.isLoaded() && classificationRealmResults.isValid()) {
+                    if (classificationRealmResults.size() > 0) {
+                        getView().setClassifications(realm.copyFromRealm(classificationRealmResults));
+                    } else {
+                        loadClassification();
+                    }
+                }
+            }
+        });
     }
 
     void onStop() {
+        classificationRealmResults.removeChangeListeners();
         realm.close();
     }
 
-    void addJob(String title, String description, int classification, String location, String feeStr, String dateStart,
-                String dateEnd) {
-        double feeDbl = 0.0;
+    private void loadClassification() {
+        getView().startLoading();
+        App.getInstance().getApiInterface().classifications().enqueue(
+                new Callback<List<Classification>>() {
+                    @Override
+                    public void onResponse(Call<List<Classification>> call,
+                                           final Response<List<Classification>> response) {
+                        getView().stopLoading();
+                        if (response.isSuccessful()) {
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        realm.insertOrUpdate(response.body());
+                                    }
+                                }, new Realm.Transaction.OnError() {
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        error.printStackTrace();
+                                        getView().showMessage("Error Saving API Response");
+                                    }
+                                });
+                            }
+                        } else {
+                            try {
+                                getView().showMessage(response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                getView().showMessage(response.message() != null ? response.message()
+                                        : "Unknown Error");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Classification>> call, Throwable t) {
+                        t.printStackTrace();
+                        getView().stopLoading();
+                        getView().showMessage("Error Connecting to Server");
+                    }
+                });
+    }
+
+    void addJob(String title, String description, int classification, String location, String feeStr,
+                String dateStart, String dateEnd) {
+        double feeDbl;
         try {
             feeDbl = Double.parseDouble(feeStr);
         } catch (Exception e) {
             e.printStackTrace();
             getView().showMessage("Fee not valid amount!");
+            return;
         }
         if (title.isEmpty() || description.isEmpty() || location.isEmpty() || feeStr.isEmpty()
                 || dateStart.isEmpty() || dateEnd.isEmpty()) {

@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.tip.theboss.R;
 import com.tip.theboss.databinding.FragmentJobFormBinding;
+import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.util.DateTimeUtils;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
@@ -27,6 +30,7 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
 
     private FragmentJobFormBinding binding;
     private ProgressDialog progressDialog;
+    private List<Classification> classifications;
 
     public JobFormFragment() {
     }
@@ -67,9 +71,15 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
 
     @Override
     public void onPost() {
+        int classificationItemPosition = binding.spinnerClassification.getSelectedItemPosition();
+        if (classifications == null || classificationItemPosition == -1
+                || classificationItemPosition > classifications.size()) {
+            showMessage("Invalid Classification");
+            return;
+        }
         presenter.addJob(binding.etTitle.getText().toString(),
                 binding.etDescription.getText().toString(),
-                binding.spinnerClassification.getSelectedItemPosition(),
+                classifications.get(classificationItemPosition).getId(),
                 binding.etLocation.getText().toString(),
                 binding.etFee.getText().toString(),
                 binding.txtDateStart.getText().toString(),
@@ -119,7 +129,7 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setCancelable(false);
-            progressDialog.setMessage("Connecting in...");
+            progressDialog.setMessage("Connecting...");
         }
         progressDialog.show();
     }
@@ -144,5 +154,18 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
                 .setCancelable(false)
                 .show();
 
+    }
+
+    @Override
+    public void setClassifications(List<Classification> classifications) {
+        this.classifications = classifications;
+        String[] spinnerArray = new String[classifications.size()];
+        for (int i = 0; i < classifications.size(); i++) {
+            spinnerArray[i] = classifications.get(i).getTitle();
+        }
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, spinnerArray);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerClassification.setAdapter(spinnerArrayAdapter);
     }
 }

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GrabChores.iml" filepath="$PROJECT_DIR$/GrabChores.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/grabchores_android.iml" filepath="$PROJECT_DIR$/grabchores_android.iml" />
     </modules>
   </component>
 </project>

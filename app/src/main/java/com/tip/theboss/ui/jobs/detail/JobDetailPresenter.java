@@ -1,12 +1,10 @@
 package com.tip.theboss.ui.jobs.detail;
 
-import android.util.Log;
-
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 import com.tip.theboss.app.App;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
-import com.tip.theboss.model.pojo.JobApplication;
+import com.tip.theboss.model.response.JobApplicationResponse;
 
 import java.io.IOException;
 
@@ -50,16 +48,17 @@ class JobDetailPresenter extends MvpNullObjectBasePresenter<JobDetailView> {
         getView().startLoading();
         App.getInstance().getApiInterface().apply(
                 Credentials.basic(user.getUsername(), user.getPassword()), job.getId())
-                .enqueue(new Callback<JobApplication>() {
+                .enqueue(new Callback<JobApplicationResponse>() {
                     @Override
-                    public void onResponse(Call<JobApplication> call, final Response<JobApplication> response) {
+                    public void onResponse(Call<JobApplicationResponse> call,
+                                           final Response<JobApplicationResponse> response) {
                         getView().stopLoading();
                         if (response.isSuccessful()) {
                             try (Realm realm = Realm.getDefaultInstance()) {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        realm.insertOrUpdate(response.body().getJob());
+                                        realm.insertOrUpdate(response.body().getJobObj());
                                     }
                                 }, new Realm.Transaction.OnSuccess() {
                                     @Override
@@ -86,7 +85,7 @@ class JobDetailPresenter extends MvpNullObjectBasePresenter<JobDetailView> {
                     }
 
                     @Override
-                    public void onFailure(Call<JobApplication> call, Throwable t) {
+                    public void onFailure(Call<JobApplicationResponse> call, Throwable t) {
                         t.printStackTrace();
                         getView().stopLoading();
                         getView().showMessage("Error Connecting to Server");

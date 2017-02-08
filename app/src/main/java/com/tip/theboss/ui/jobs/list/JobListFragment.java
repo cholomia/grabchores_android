@@ -76,7 +76,8 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
         binding.swipeRefreshLayout.setOnRefreshListener(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
         return binding.getRoot();
     }
 

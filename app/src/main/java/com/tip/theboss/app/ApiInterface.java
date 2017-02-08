@@ -1,11 +1,13 @@
 package com.tip.theboss.app;
 
+import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
-import com.tip.theboss.model.pojo.JobApplication;
+import com.tip.theboss.model.response.JobApplicationResponse;
 import com.tip.theboss.model.response.JobListResponse;
 import com.tip.theboss.model.response.LoginResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -36,6 +38,9 @@ public interface ApiInterface {
                         @Field(Constants.LAST_NAME) String lastName,
                         @Field(Constants.PASSWORD) String password);
 
+    @GET(Endpoints.CLASSIFICATIONS)
+    Call<List<Classification>> classifications();
+
     @GET(Endpoints.JOBS)
     Call<JobListResponse> jobs(@Header("Authorization") String basicAuthentication);
 
@@ -57,7 +62,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Endpoints.JOB_APPLICATION)
-    Call<JobApplication> apply(@Header("Authorization") String basicAuthentication,
-                               @Field("job_id") int jobId);
+    Call<JobApplicationResponse> apply(@Header("Authorization") String basicAuthentication,
+                                       @Field("job") int jobId);
 
 }

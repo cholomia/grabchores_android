@@ -18,4 +18,5 @@ public class Endpoints {
 
     public static final String JOBS = "jobs/";
     public static final String JOB_APPLICATION = JOBS + "application/";
+    public static final String CLASSIFICATIONS = "classifications/";
 }
