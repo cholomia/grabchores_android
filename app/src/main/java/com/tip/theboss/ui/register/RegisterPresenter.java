@@ -41,7 +41,7 @@ class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
                                     String errorBody = response.errorBody().string();
                                     getView().showMessage(errorBody);
                                 } catch (IOException e) {
-                                    Log.e(TAG, "onResponse: Error parsing error body as string", e);
+                                    Log.e(TAG, "onClassificationReturn: Error parsing error body as string", e);
                                     getView().showMessage(response.message() != null ?
                                             response.message() : "Unknown Exception");
                                 }

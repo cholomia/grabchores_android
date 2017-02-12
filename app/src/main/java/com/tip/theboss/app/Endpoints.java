@@ -8,8 +8,8 @@ package com.tip.theboss.app;
 public class Endpoints {
 
     public static final String _ID = "{id}/";
-    public static final String BASE_URL = "http://grabchores.pythonanywhere.com";
-    //public static final String BASE_URL = "http://127.0.0.1:8000";
+    //public static final String BASE_URL = "http://grabchores.pythonanywhere.com";
+    public static final String BASE_URL = "http://192.168.1.6:8000";
 
     public static final String API_URL = BASE_URL + "/api/";
 

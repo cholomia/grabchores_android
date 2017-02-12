@@ -70,4 +70,8 @@ public class User extends RealmObject {
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

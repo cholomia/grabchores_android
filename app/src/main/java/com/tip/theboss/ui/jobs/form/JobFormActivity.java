@@ -1,4 +1,4 @@
-package com.tip.theboss.ui.jobs.create;
+package com.tip.theboss.ui.jobs.form;
 
 
 import android.app.DatePickerDialog;
@@ -7,17 +7,16 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.tip.theboss.R;
-import com.tip.theboss.databinding.FragmentJobFormBinding;
+import com.tip.theboss.databinding.ActivityJobFormBinding;
 import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.util.DateTimeUtils;
 
@@ -25,34 +24,42 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
+public class JobFormActivity extends MvpActivity<JobFormView, JobFormPresenter>
         implements JobFormView, CompoundButton.OnCheckedChangeListener {
 
-    private FragmentJobFormBinding binding;
+    private ActivityJobFormBinding binding;
     private ProgressDialog progressDialog;
     private List<Classification> classifications;
 
-    public JobFormFragment() {
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_job_form, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_job_form);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Create New Job");
+        }
         binding.setView(getMvpView());
         binding.checkboxSingleDay.setOnCheckedChangeListener(this);
-        return binding.getRoot();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
         presenter.onStart();
     }
 
     @Override
-    public void onStop() {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
         presenter.onStop();
-        super.onStop();
+        super.onDestroy();
     }
 
     @NonNull
@@ -63,10 +70,8 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (b) {
-            binding.txtTo.setVisibility(View.GONE);
-            binding.txtDateEnd.setVisibility(View.GONE);
-        }
+        binding.txtTo.setVisibility(b ? View.GONE : View.VISIBLE);
+        binding.txtDateEnd.setVisibility(b ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
                     binding.txtDateEnd.getText().toString(), DateTimeUtils.DATE_ONLY);
         }
         if (calendar == null) calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -121,13 +126,13 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void startLoading() {
         if (progressDialog == null) {
-            progressDialog = new ProgressDialog(getContext());
+            progressDialog = new ProgressDialog(this);
             progressDialog.setCancelable(false);
             progressDialog.setMessage("Connecting...");
         }
@@ -148,12 +153,11 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
         binding.etFee.setText("");
         binding.txtDateStart.setText("");
         binding.txtDateEnd.setText("");
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(this)
                 .setTitle("Job Posted!")
                 .setPositiveButton("Close", null)
                 .setCancelable(false)
                 .show();
-
     }
 
     @Override
@@ -163,7 +167,7 @@ public class JobFormFragment extends MvpFragment<JobFormView, JobFormPresenter>
         for (int i = 0; i < classifications.size(); i++) {
             spinnerArray[i] = classifications.get(i).getTitle();
         }
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(),
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, spinnerArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerClassification.setAdapter(spinnerArrayAdapter);

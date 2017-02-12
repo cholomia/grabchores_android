@@ -10,8 +10,8 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.tip.theboss.R;
 import com.tip.theboss.databinding.ActivityLoginBinding;
-import com.tip.theboss.ui.menu.MainActivity;
 import com.tip.theboss.ui.register.RegisterActivity;
+import com.tip.theboss.ui.splash.SplashActivity;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
 
@@ -70,7 +70,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void onLoginSuccess() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, SplashActivity.class));
         finish();
     }
 }

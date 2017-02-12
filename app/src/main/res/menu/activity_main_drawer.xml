@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_search_jobs"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="Search Jobs" />
+    <item
+        android:id="@+id/nav_create_new_job"
+        android:icon="@drawable/ic_menu_gallery"
+        android:title="Create New Job" />
+    <item
+        android:id="@+id/nav_my_job_posted"
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="My Job Posted" />
+    <item
+        android:id="@+id/nav_my_job_applications"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="My Job Applications" />
+    <item
+        android:id="@+id/nav_my_account"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="My Account" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="Logout" />
+
+</menu>

@@ -1,4 +1,4 @@
-package com.tip.theboss.ui.jobs.create;
+package com.tip.theboss.ui.jobs.form;
 
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 import com.tip.theboss.app.App;

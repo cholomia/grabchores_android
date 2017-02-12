@@ -65,7 +65,7 @@ public class UserPresenter<V extends UserView> extends MvpNullObjectBasePresente
                                 try {
                                     getView().showMessage(response.errorBody().string());
                                 } catch (IOException e) {
-                                    Log.e(TAG, "onResponse: Error parsing error body", e);
+                                    Log.e(TAG, "onClassificationReturn: Error parsing error body", e);
                                     getView().showMessage(response.message() != null ? response.message()
                                             : "Unknown Error");
                                 }

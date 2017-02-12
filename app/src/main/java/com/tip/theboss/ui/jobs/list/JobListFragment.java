@@ -34,20 +34,30 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
 
     private static final String ARG_SEARCH = "arg_search";
     private static final String ARG_CLASSIFICATION = "arg_classification";
+    private static final String ARG_USERNAME = "arg_username";
+    private static final String ARG_OPEN = "arg_open";
+    private static final String ARG_APPLY = "arg_apply";
 
     private FragmentJobListBinding binding;
     private JobListAdapter adapter;
     private boolean hasSearch;
     private int classification;
+    private String username;
+    private boolean open;
+    private boolean apply;
 
     public JobListFragment() {
     }
 
-    public static JobListFragment newInstance(boolean hasSearch, int classification) {
+    public static JobListFragment newInstance(boolean hasSearch, int classification, String username,
+                                              boolean open, boolean apply) {
         JobListFragment jobListFragment = new JobListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_SEARCH, hasSearch);
         args.putInt(ARG_CLASSIFICATION, classification);
+        args.putString(ARG_USERNAME, username);
+        args.putBoolean(ARG_OPEN, open);
+        args.putBoolean(ARG_APPLY, apply);
         jobListFragment.setArguments(args);
         return jobListFragment;
     }
@@ -65,6 +75,9 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
         if (getArguments() != null) {
             hasSearch = getArguments().getBoolean(ARG_SEARCH, false);
             classification = getArguments().getInt(ARG_CLASSIFICATION, -1);
+            username = getArguments().getString(ARG_USERNAME);
+            open = getArguments().getBoolean(ARG_OPEN, true);
+            apply = getArguments().getBoolean(ARG_APPLY, false);
         }
         if (hasSearch) setHasOptionsMenu(true);
     }
@@ -84,7 +97,7 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
     @Override
     public void onStart() {
         super.onStart();
-        presenter.onStart(classification);
+        presenter.onStart(classification, username, open, apply);
     }
 
     @Override

@@ -38,12 +38,30 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
 
     private String query;
     private int classification;
+    private String username;
 
-    void onStart(int classification) {
+    void onStart(int classification, String username, boolean open, boolean apply) {
         this.classification = classification;
+        this.username = username;
         realm = Realm.getDefaultInstance();
         user = realm.where(User.class).findFirst();
         jobRealmResults = realm.where(Job.class).findAllSortedAsync("created", Sort.DESCENDING);
+        if (classification != -1) {
+            jobRealmResults = jobRealmResults.where().equalTo("classificationId", classification)
+                    .findAllSortedAsync("created", Sort.DESCENDING);
+        }
+        if (username != null && !username.isEmpty()) {
+            jobRealmResults = jobRealmResults.where().equalTo("username", username)
+                    .findAllSortedAsync("created", Sort.DESCENDING);
+        }
+        if (open) {
+            jobRealmResults = jobRealmResults.where().equalTo("open", open)
+                    .findAllSortedAsync("created", Sort.DESCENDING);
+        }
+        if (apply) {
+            jobRealmResults = jobRealmResults.where().equalTo("apply", apply)
+                    .findAllSortedAsync("created", Sort.DESCENDING);
+        }
         jobRealmResults.addChangeListener(new RealmChangeListener<RealmResults<Job>>() {
             @Override
             public void onChange(RealmResults<Job> element) {
@@ -73,11 +91,6 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
                         .contains("description", query, Case.INSENSITIVE)
                         .findAll();
             }
-            if (classification != -1) {
-                jobFilterRealmResults = jobFilterRealmResults.where()
-                        .equalTo("classificationId", classification)
-                        .findAll();
-            }
             List<Job> jobs = realm.copyFromRealm(jobFilterRealmResults);
             getView().setJobs(jobs);
         }
@@ -90,7 +103,10 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
             parameters.put("description", query);
         }
         if (classification != -1) {
-            parameters.put("classification", classification + "");
+            parameters.put("classification_id", classification + "");
+        }
+        if (username != null && !username.isEmpty()) {
+            parameters.put("username", username);
         }
         if (parameters.isEmpty())
             load(App.getInstance().getApiInterface().jobs(Credentials.basic(user.getUsername(), user.getPassword())));
@@ -101,19 +117,46 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
         load(App.getInstance().getApiInterface().jobs(Credentials.basic(user.getUsername(), user.getPassword()), params));
     }
 
-    private void load(Call<JobListResponse> jobListResponseCall) {
+    private void load(final Call<JobListResponse> jobListResponseCall) {
         jobListResponseCall.enqueue(new Callback<JobListResponse>() {
             @Override
             public void onResponse(Call<JobListResponse> call, final Response<JobListResponse> response) {
                 getView().stopLoading();
                 if (response.isSuccessful()) {
+
+                    final String title = call.request().url().queryParameter("title");
+                    final String description = call.request().url().queryParameter("description");
+                    final String classification = call.request().url().queryParameter("classification_id");
+                    final String username = call.request().url().queryParameter("username");
+
                     try (Realm realm = Realm.getDefaultInstance()) {
                         realm.executeTransactionAsync(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 if (response.body().getPrevious() == null
-                                        || response.body().getPrevious().isEmpty())
-                                    realm.delete(Job.class);
+                                        || response.body().getPrevious().isEmpty()) {
+                                    RealmResults<Job> jobRealmResults = realm.where(Job.class)
+                                            .findAll();
+                                    if (title != null && description != null) {
+                                        jobRealmResults = jobRealmResults.where()
+                                                .contains("title", title, Case.INSENSITIVE)
+                                                .or()
+                                                .contains("description", description, Case.INSENSITIVE)
+                                                .findAll();
+                                    }
+                                    if (classification != null) {
+                                        int classificationId = Integer.parseInt(classification);
+                                        jobRealmResults = jobRealmResults.where()
+                                                .equalTo("classification_id", classificationId)
+                                                .findAll();
+                                    }
+                                    if (username != null) {
+                                        jobRealmResults = jobRealmResults.where()
+                                                .equalTo("username", username).findAll();
+                                    }
+                                    jobRealmResults.deleteAllFromRealm();
+                                }
+
                                 realm.insertOrUpdate(response.body().getResults());
                             }
                         }, new Realm.Transaction.OnError() {
@@ -123,15 +166,13 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
                                 getView().showMessage("Error Saving Job List");
                             }
                         });
-                        if (response.body().getCount() <= 0)
-                            getView().showMessage("No Forums Retrieved");
                         getView().addNext(response.body().getNext());
                     }
                 } else {
                     try {
                         getView().showMessage(response.errorBody().string());
                     } catch (IOException e) {
-                        Log.e(TAG, "onResponse: Error parsing error body", e);
+                        Log.e(TAG, "onClassificationReturn: Error parsing error body", e);
                         getView().showMessage(response.message() != null ? response.message()
                                 : "Unknown Error");
                     }

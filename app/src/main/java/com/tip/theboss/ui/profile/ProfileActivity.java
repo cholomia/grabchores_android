@@ -5,46 +5,33 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.tip.theboss.R;
-import com.tip.theboss.databinding.FragmentProfileBinding;
+import com.tip.theboss.databinding.ActivityProfileBinding;
 import com.tip.theboss.model.data.User;
 import com.tip.theboss.ui.login.LoginActivity;
 
 
-public class ProfileFragment extends MvpFragment<ProfileView, ProfilePresenter>
+public class ProfileActivity extends MvpActivity<ProfileView, ProfilePresenter>
         implements ProfileView, SwipeRefreshLayout.OnRefreshListener {
 
-    private FragmentProfileBinding binding;
-
-    public ProfileFragment() {
-    }
-
-    //public ProfileF/
+    private ActivityProfileBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
         binding.setView(getMvpView());
         binding.swipeRefreshLayout.setOnRefreshListener(this);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         presenter.onStart();
     }
 
     @Override
-    public void onStop() {
+    protected void onDestroy() {
         presenter.onStop();
-        super.onStop();
+        super.onDestroy();
     }
 
     @NonNull
@@ -70,13 +57,13 @@ public class ProfileFragment extends MvpFragment<ProfileView, ProfilePresenter>
 
     @Override
     public void onLogoutSuccess() {
-        startActivity(new Intent(getContext(), LoginActivity.class));
-        getActivity().finish();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

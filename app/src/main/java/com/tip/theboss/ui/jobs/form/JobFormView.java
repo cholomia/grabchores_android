@@ -1,4 +1,4 @@
-package com.tip.theboss.ui.jobs.create;
+package com.tip.theboss.ui.jobs.form;
 
 import android.view.View;
 
