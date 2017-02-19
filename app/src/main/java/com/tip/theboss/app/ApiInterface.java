@@ -10,12 +10,16 @@ import com.tip.theboss.model.response.LoginResponse;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 /**
@@ -23,6 +27,7 @@ import retrofit2.http.QueryMap;
  * @since 24/01/2017
  */
 
+@SuppressWarnings("WeakerAccess")
 public interface ApiInterface {
 
     @FormUrlEncoded
@@ -42,27 +47,46 @@ public interface ApiInterface {
     Call<List<Classification>> classifications();
 
     @GET(Endpoints.JOBS)
-    Call<JobListResponse> jobs(@Header("Authorization") String basicAuthentication);
+    Call<JobListResponse> jobs(@Header(Constants.AUTHORIZATION) String basicAuthentication);
 
     @GET(Endpoints.JOBS)
-    Call<JobListResponse> jobs(@Header("Authorization") String basicAuthentication,
+    Call<JobListResponse> jobs(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                @QueryMap Map<String, String> params);
 
+    @GET(Endpoints.JOB_ID)
+    Call<Job> getJob(@Path(Constants.ID) int id,
+                     @Header(Constants.AUTHORIZATION) String basicAuthentication);
 
     @FormUrlEncoded
     @POST(Endpoints.JOBS)
-    Call<Job> createJob(@Header("Authorization") String basicAuthentication,
-                        @Field("title") String title,
-                        @Field("description") String description,
-                        @Field("classification") int classificationId,
-                        @Field("location") String location,
-                        @Field("fee") double fee,
-                        @Field("date_start") String dateStart,
-                        @Field("date_end") String dateEnd);
+    Call<Job> createJob(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                        @Field(Constants.TITLE) String title,
+                        @Field(Constants.DESCRIPTION) String description,
+                        @Field(Constants.CLASSIFICATION) int classificationId,
+                        @Field(Constants.LOCATION) String location,
+                        @Field(Constants.FEE) double fee,
+                        @Field(Constants.DATE_START) String dateStart,
+                        @Field(Constants.DATE_END) String dateEnd);
+
+    @FormUrlEncoded
+    @PUT(Endpoints.JOB_ID)
+    Call<Job> updateJob(@Path(Constants.ID) int id,
+                        @Header(Constants.AUTHORIZATION) String basicAuthentication,
+                        @Field(Constants.TITLE) String title,
+                        @Field(Constants.DESCRIPTION) String description,
+                        @Field(Constants.CLASSIFICATION) int classificationId,
+                        @Field(Constants.LOCATION) String location,
+                        @Field(Constants.FEE) double fee,
+                        @Field(Constants.DATE_START) String dateStart,
+                        @Field(Constants.DATE_END) String dateEnd);
+
+    @DELETE(Endpoints.JOB_ID)
+    Call<ResponseBody> deleteJob(@Path(Constants.ID) int id,
+                                 @Header(Constants.AUTHORIZATION) String basicAuthentication);
 
     @FormUrlEncoded
     @POST(Endpoints.JOB_APPLICATION)
-    Call<JobApplicationResponse> apply(@Header("Authorization") String basicAuthentication,
-                                       @Field("job") int jobId);
+    Call<JobApplicationResponse> apply(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                                       @Field(Constants.JOB) int jobId);
 
 }

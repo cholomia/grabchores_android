@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.tip.theboss.R;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityMainBinding;
 import com.tip.theboss.databinding.NavHeaderMainBinding;
 import com.tip.theboss.model.data.Classification;
@@ -89,18 +90,18 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter>
             String user = presenter.getUser();
             if (user != null) {
                 Intent intent = new Intent(this, JobListActivity.class);
-                intent.putExtra("has_search", true);
-                intent.putExtra("username", user);
-                intent.putExtra("open", false);
+                intent.putExtra(Constants.HAS_SEARCH, true);
+                intent.putExtra(Constants.USERNAME, user);
+                intent.putExtra(Constants.OPEN, false);
                 startActivity(intent);
             } else {
                 showMessage("User not yet loaded");
             }
         } else if (id == R.id.nav_my_job_applications) {
             Intent intent = new Intent(this, JobListActivity.class);
-            intent.putExtra("has_search", true);
-            intent.putExtra("open", false);
-            intent.putExtra("apply", true);
+            intent.putExtra(Constants.HAS_SEARCH, true);
+            intent.putExtra(Constants.OPEN, false);
+            intent.putExtra(Constants.APPLY, true);
             startActivity(intent);
         } else if (id == R.id.nav_my_account) {
             startActivity(new Intent(this, ProfileActivity.class));

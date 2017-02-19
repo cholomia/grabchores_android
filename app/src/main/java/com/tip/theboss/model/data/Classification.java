@@ -4,7 +4,8 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Cholo Mia on 2/8/2017.
+ * @author pocholomia
+ * @since 02/08/2017
  */
 
 public class Classification extends RealmObject {

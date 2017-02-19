@@ -1,7 +1,5 @@
 package com.tip.theboss.ui.base;
 
-import android.util.Log;
-
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 import com.tip.theboss.app.App;
 import com.tip.theboss.model.data.User;
@@ -41,7 +39,7 @@ public class UserPresenter<V extends UserView> extends MvpNullObjectBasePresente
                                         public void execute(Realm realm) {
                                             User user = response.body().getUser();
                                             user.setPassword(password);
-                                            // TODO: 12/4/2016 Add Encryption (see url above)
+                                            // TODO: 12/4/2016 Add Encryption
                                             realm.copyToRealmOrUpdate(user);
                                         }
                                     }, new Realm.Transaction.OnSuccess() {
@@ -54,7 +52,7 @@ public class UserPresenter<V extends UserView> extends MvpNullObjectBasePresente
                                         @Override
                                         public void onError(Throwable error) {
                                             realm.close();
-                                            Log.e(TAG, "onError: Unable to save USER", error);
+                                            error.printStackTrace();
                                             getView().showMessage("Error Saving API Response");
                                         }
                                     });
@@ -65,7 +63,7 @@ public class UserPresenter<V extends UserView> extends MvpNullObjectBasePresente
                                 try {
                                     getView().showMessage(response.errorBody().string());
                                 } catch (IOException e) {
-                                    Log.e(TAG, "onClassificationReturn: Error parsing error body", e);
+                                    e.printStackTrace();
                                     getView().showMessage(response.message() != null ? response.message()
                                             : "Unknown Error");
                                 }
@@ -74,7 +72,7 @@ public class UserPresenter<V extends UserView> extends MvpNullObjectBasePresente
 
                         @Override
                         public void onFailure(Call<LoginResponse> call, Throwable t) {
-                            Log.e(TAG, "onFailure: Error calling login api", t);
+                            t.printStackTrace();
                             getView().stopLoading();
                             getView().showMessage("Error Connecting to Server");
                         }

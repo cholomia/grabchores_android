@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.tip.theboss.model.data.Classification;
+import com.tip.theboss.model.data.Job;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface JobFormView extends MvpView {
     void onCreateSuccess();
 
     void setClassifications(List<Classification> classifications);
+
+    void setJob(Job job);
 }

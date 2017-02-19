@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.tip.theboss.R;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityClassificationsBinding;
 import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.ui.jobs.list.JobListActivity;
@@ -86,9 +87,9 @@ public class ClassificationsActivity
     @Override
     public void onClassificationClick(Classification classification) {
         Intent intent = new Intent(this, JobListActivity.class);
-        intent.putExtra("has_search", true);
-        intent.putExtra("classification", classification.getId());
-        intent.putExtra("classification_title", classification.getTitle());
+        intent.putExtra(Constants.HAS_SEARCH, true);
+        intent.putExtra(Constants.CLASSIFICATION, classification.getId());
+        intent.putExtra(Constants.CLASSIFICATION_TITLE, classification.getTitle());
         startActivity(intent);
     }
 

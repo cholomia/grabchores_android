@@ -5,18 +5,19 @@ package com.tip.theboss.app;
  * @since 24/01/2017
  */
 
-public class Endpoints {
+class Endpoints {
 
-    public static final String _ID = "{id}/";
+    private static final String _ID = "{id}/";
     //public static final String BASE_URL = "http://grabchores.pythonanywhere.com";
-    public static final String BASE_URL = "http://192.168.1.6:8000";
+    private static final String BASE_URL = "http://192.168.1.4:8000";
 
-    public static final String API_URL = BASE_URL + "/api/";
+    static final String API_URL = BASE_URL + "/api/";
 
-    public static final String LOGIN = "user/login/";
-    public static final String REGISTER = "user/register/";
+    static final String LOGIN = "user/login/";
+    static final String REGISTER = "user/register/";
 
-    public static final String JOBS = "jobs/";
-    public static final String JOB_APPLICATION = JOBS + "application/";
-    public static final String CLASSIFICATIONS = "classifications/";
+    static final String JOBS = "jobs/";
+    static final String JOB_APPLICATION = JOBS + "application/";
+    static final String CLASSIFICATIONS = "classifications/";
+    static final String JOB_ID = JOBS + _ID;
 }

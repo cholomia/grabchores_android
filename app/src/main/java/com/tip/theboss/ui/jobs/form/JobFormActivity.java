@@ -3,6 +3,7 @@ package com.tip.theboss.ui.jobs.form;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,8 +17,10 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.tip.theboss.R;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityJobFormBinding;
 import com.tip.theboss.model.data.Classification;
+import com.tip.theboss.model.data.Job;
 import com.tip.theboss.util.DateTimeUtils;
 
 import java.util.Calendar;
@@ -30,19 +33,22 @@ public class JobFormActivity extends MvpActivity<JobFormView, JobFormPresenter>
     private ActivityJobFormBinding binding;
     private ProgressDialog progressDialog;
     private List<Classification> classifications;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_job_form);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Create New Job");
-        }
+
         binding.setView(getMvpView());
         binding.checkboxSingleDay.setOnCheckedChangeListener(this);
 
-        presenter.onStart();
+        id = getIntent().getIntExtra(Constants.ID, -1);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(id == -1 ? "Create New Job" : "Update Job");
+        }
+        presenter.onStart(id);
     }
 
     @Override
@@ -82,7 +88,8 @@ public class JobFormActivity extends MvpActivity<JobFormView, JobFormPresenter>
             showMessage("Invalid Classification");
             return;
         }
-        presenter.addJob(binding.etTitle.getText().toString(),
+        presenter.addJob(id,
+                binding.etTitle.getText().toString(),
                 binding.etDescription.getText().toString(),
                 classifications.get(classificationItemPosition).getId(),
                 binding.etLocation.getText().toString(),
@@ -155,7 +162,12 @@ public class JobFormActivity extends MvpActivity<JobFormView, JobFormPresenter>
         binding.txtDateEnd.setText("");
         new AlertDialog.Builder(this)
                 .setTitle("Job Posted!")
-                .setPositiveButton("Close", null)
+                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        JobFormActivity.this.finish();
+                    }
+                })
                 .setCancelable(false)
                 .show();
     }
@@ -171,5 +183,22 @@ public class JobFormActivity extends MvpActivity<JobFormView, JobFormPresenter>
                 android.R.layout.simple_spinner_item, spinnerArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerClassification.setAdapter(spinnerArrayAdapter);
+    }
+
+    @Override
+    public void setJob(Job job) {
+        binding.etTitle.setText(job.getTitle());
+        binding.etDescription.setText(job.getDescription());
+        for (int i = 0; i < classifications.size(); i++) {
+            if (job.getClassification() == classifications.get(i).getId()) {
+                binding.spinnerClassification.setSelection(i);
+                break;
+            }
+        }
+        binding.etLocation.setText(job.getLocation());
+        binding.etFee.setText(String.valueOf(job.getFee()));
+        binding.txtDateStart.setText(job.getDateStart());
+        binding.txtDateEnd.setText(job.getDateEnd());
+        binding.checkboxSingleDay.setChecked(job.getDateStart().contentEquals(job.getDateEnd()));
     }
 }

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.tip.theboss.R;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.FragmentJobListBinding;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.ui.jobs.detail.JobDetailActivity;
@@ -31,12 +32,6 @@ import java.util.Map;
 
 public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPresenter>
         implements JobListView, SwipeRefreshLayout.OnRefreshListener {
-
-    private static final String ARG_SEARCH = "arg_search";
-    private static final String ARG_CLASSIFICATION = "arg_classification";
-    private static final String ARG_USERNAME = "arg_username";
-    private static final String ARG_OPEN = "arg_open";
-    private static final String ARG_APPLY = "arg_apply";
 
     private FragmentJobListBinding binding;
     private JobListAdapter adapter;
@@ -53,11 +48,11 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
                                               boolean open, boolean apply) {
         JobListFragment jobListFragment = new JobListFragment();
         Bundle args = new Bundle();
-        args.putBoolean(ARG_SEARCH, hasSearch);
-        args.putInt(ARG_CLASSIFICATION, classification);
-        args.putString(ARG_USERNAME, username);
-        args.putBoolean(ARG_OPEN, open);
-        args.putBoolean(ARG_APPLY, apply);
+        args.putBoolean(Constants.HAS_SEARCH, hasSearch);
+        args.putInt(Constants.CLASSIFICATION, classification);
+        args.putString(Constants.USERNAME, username);
+        args.putBoolean(Constants.OPEN, open);
+        args.putBoolean(Constants.APPLY, apply);
         jobListFragment.setArguments(args);
         return jobListFragment;
     }
@@ -73,11 +68,11 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         if (getArguments() != null) {
-            hasSearch = getArguments().getBoolean(ARG_SEARCH, false);
-            classification = getArguments().getInt(ARG_CLASSIFICATION, -1);
-            username = getArguments().getString(ARG_USERNAME);
-            open = getArguments().getBoolean(ARG_OPEN, true);
-            apply = getArguments().getBoolean(ARG_APPLY, false);
+            hasSearch = getArguments().getBoolean(Constants.HAS_SEARCH, false);
+            classification = getArguments().getInt(Constants.CLASSIFICATION, -1);
+            username = getArguments().getString(Constants.USERNAME);
+            open = getArguments().getBoolean(Constants.OPEN, true);
+            apply = getArguments().getBoolean(Constants.APPLY, false);
         }
         if (hasSearch) setHasOptionsMenu(true);
     }
@@ -131,12 +126,13 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                presenter.setQuery(query);
+                presenter.setQuery(query, true);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                presenter.setQuery(newText, false);
                 return false;
             }
         });
@@ -171,7 +167,7 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
     @Override
     public void onJobItemClicked(Job job) {
         Intent intent = new Intent(getContext(), JobDetailActivity.class);
-        intent.putExtra("id", job.getId());
+        intent.putExtra(Constants.ID, job.getId());
         startActivity(intent);
     }
 

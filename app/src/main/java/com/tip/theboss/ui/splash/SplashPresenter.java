@@ -15,8 +15,8 @@ import retrofit2.Response;
  * Created by Cholo Mia on 2/11/2017.
  */
 
-public class SplashPresenter extends MvpNullObjectBasePresenter<SplashView> {
-    public void refreshClassifications() {
+class SplashPresenter extends MvpNullObjectBasePresenter<SplashView> {
+    void refreshClassifications() {
         App.getInstance().getApiInterface().classifications().enqueue(new Callback<List<Classification>>() {
             @Override
             public void onResponse(Call<List<Classification>> call, final Response<List<Classification>> response) {

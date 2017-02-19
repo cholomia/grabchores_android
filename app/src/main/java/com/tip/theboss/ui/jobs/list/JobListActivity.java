@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.tip.theboss.R;
+import com.tip.theboss.app.Constants;
 
 public class JobListActivity extends AppCompatActivity {
 
@@ -18,14 +19,26 @@ public class JobListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_list);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        boolean hasSearch = getIntent().getBooleanExtra("has_search", false);
-        int classification = getIntent().getIntExtra("classification", -1);
-        String classificationTitle = getIntent().getStringExtra("classification_title");
-        String username = getIntent().getStringExtra("username");
-        boolean open = getIntent().getBooleanExtra("open", true);
-        boolean apply = getIntent().getBooleanExtra("apply", false);
-        if (classification != -1 && classificationTitle != null && getSupportActionBar() != null)
-            getSupportActionBar().setTitle(classificationTitle);
+        boolean hasSearch = getIntent().getBooleanExtra(Constants.HAS_SEARCH, false);
+        int classification = getIntent().getIntExtra(Constants.CLASSIFICATION, -1);
+        String classificationTitle = getIntent().getStringExtra(Constants.CLASSIFICATION_TITLE);
+        String username = getIntent().getStringExtra(Constants.USERNAME);
+        boolean open = getIntent().getBooleanExtra(Constants.OPEN, true);
+        boolean apply = getIntent().getBooleanExtra(Constants.APPLY, false);
+        if (getSupportActionBar() != null) {
+            if (classificationTitle != null && username != null) {
+                getSupportActionBar().setTitle(username);
+                getSupportActionBar().setSubtitle(classificationTitle);
+            } else if (username != null) {
+                getSupportActionBar().setTitle(username);
+            } else if (classificationTitle != null) {
+                getSupportActionBar().setTitle(classificationTitle);
+            }
+            if (apply) {
+                getSupportActionBar().setTitle("My Job Applications");
+            }
+        }
+
         fragmentManager = getSupportFragmentManager();
         changeFragment(JobListFragment.newInstance(hasSearch, classification, username, open, apply),
                 JobListFragment.class.getSimpleName(), false);

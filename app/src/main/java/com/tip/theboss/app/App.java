@@ -62,7 +62,7 @@ public class App extends Application {
         if (retrofit == null) {
 
             Gson gson = new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .setDateFormat(Constants.YYYY_MM_DD_T_HH_MM_SS)
                     .create();
 
             String url = Endpoints.API_URL;

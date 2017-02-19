@@ -12,7 +12,7 @@ import io.realm.RealmModel;
  * @since 27/01/2017
  */
 
-public class ProfilePresenter extends UserPresenter<ProfileView> {
+class ProfilePresenter extends UserPresenter<ProfileView> {
 
     private Realm realm;
 
@@ -24,9 +24,7 @@ public class ProfilePresenter extends UserPresenter<ProfileView> {
         user.addChangeListener(new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel element) {
-                if (user.isLoaded() && user.isValid()) {
-                    getView().setUser(realm.copyFromRealm(user));
-                }
+                if (user.isLoaded() && user.isValid()) getView().setUser(realm.copyFromRealm(user));
             }
         });
     }
@@ -36,12 +34,12 @@ public class ProfilePresenter extends UserPresenter<ProfileView> {
         realm.close();
     }
 
-    public void refresh() {
+    void refresh() {
         if (user.isLoaded() && user.isValid())
             login(user.getUsername(), user.getPassword());
     }
 
-    public void deleteAll() {
+    void deleteAll() {
         realm.beginTransaction();
         realm.deleteAll();
         realm.commitTransaction();

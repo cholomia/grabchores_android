@@ -1,7 +1,10 @@
 package com.tip.theboss.model.response;
 
 import com.google.gson.annotations.SerializedName;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.model.data.Job;
+
+import java.util.Date;
 
 /**
  * Created by Cholo Mia on 2/8/2017.
@@ -10,12 +13,11 @@ import com.tip.theboss.model.data.Job;
 public class JobApplicationResponse {
 
     private int id;
-    @SerializedName("username")
     private String username;
-    @SerializedName("job")
-    private int jobId;
-    private boolean apply;
-    @SerializedName("job_obj")
+    private int job;
+    private boolean accept;
+    private Date created;
+    @SerializedName(Constants.JOB_OBJ)
     private Job jobObj;
 
     public int getId() {
@@ -26,6 +28,14 @@ public class JobApplicationResponse {
         this.id = id;
     }
 
+    public Job getJobObj() {
+        return jobObj;
+    }
+
+    public void setJobObj(Job jobObj) {
+        this.jobObj = jobObj;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -34,27 +44,27 @@ public class JobApplicationResponse {
         this.username = username;
     }
 
-    public int getJobId() {
-        return jobId;
+    public int getJob() {
+        return job;
     }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
+    public void setJob(int job) {
+        this.job = job;
     }
 
-    public boolean isApply() {
-        return apply;
+    public boolean isAccept() {
+        return accept;
     }
 
-    public void setApply(boolean apply) {
-        this.apply = apply;
+    public void setAccept(boolean accept) {
+        this.accept = accept;
     }
 
-    public Job getJobObj() {
-        return jobObj;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setJobObj(Job jobObj) {
-        this.jobObj = jobObj;
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

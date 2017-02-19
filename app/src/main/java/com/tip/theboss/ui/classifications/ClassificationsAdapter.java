@@ -16,12 +16,12 @@ import java.util.List;
  * Created by Cholo Mia on 2/11/2017.
  */
 
-public class ClassificationsAdapter extends RecyclerView.Adapter<ClassificationsAdapter.ViewHolder> {
+class ClassificationsAdapter extends RecyclerView.Adapter<ClassificationsAdapter.ViewHolder> {
 
     private List<Classification> classifications;
     private ClassificationsView view;
 
-    public ClassificationsAdapter(ClassificationsView view) {
+    ClassificationsAdapter(ClassificationsView view) {
         this.view = view;
         classifications = new ArrayList<>();
     }
@@ -51,10 +51,10 @@ public class ClassificationsAdapter extends RecyclerView.Adapter<Classifications
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private ItemClassificationsBinding itemClassificationsBinding;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private final ItemClassificationsBinding itemClassificationsBinding;
 
-        public ViewHolder(ItemClassificationsBinding itemClassificationsBinding) {
+        ViewHolder(ItemClassificationsBinding itemClassificationsBinding) {
             super(itemClassificationsBinding.getRoot());
             this.itemClassificationsBinding = itemClassificationsBinding;
         }

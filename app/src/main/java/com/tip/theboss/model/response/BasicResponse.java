@@ -1,7 +1,8 @@
 package com.tip.theboss.model.response;
 
 /**
- * Created by Cholo Mia on 12/4/2016.
+ * @author pocholomia
+ * @since 12/4/2016
  */
 
 public class BasicResponse {

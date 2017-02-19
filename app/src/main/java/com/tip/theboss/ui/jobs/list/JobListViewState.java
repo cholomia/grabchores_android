@@ -10,7 +10,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestorableViewState;
  * @since 26/01/2017
  */
 
-public class JobListViewState implements RestorableViewState<JobListView> {
+class JobListViewState implements RestorableViewState<JobListView> {
     @Override
     public void saveInstanceState(@NonNull Bundle out) {
 

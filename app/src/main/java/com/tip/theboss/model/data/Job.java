@@ -1,6 +1,7 @@
 package com.tip.theboss.model.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.util.DateTimeUtils;
 
 import java.util.Date;
@@ -15,30 +16,33 @@ import io.realm.annotations.PrimaryKey;
 
 public class Job extends RealmObject {
 
+    public static final String CLASSIFICATION_TITLE = "classificationTitle";
+    public static final String DATE_START = "dateStart";
+    public static final String DATE_END = "dateEnd";
+    public static final String MY_STATUS = "myStatus";
+
     @PrimaryKey
     private int id;
 
-    @SerializedName("username")
-    private String user;
+    private String username;
 
-    @SerializedName("classification_id")
-    private int classificationId;
-    @SerializedName("classification_title")
+    private int classification;
+    @SerializedName(Constants.CLASSIFICATION_TITLE)
     private String classificationTitle;
 
     private String title;
     private String description;
     private Date created;
-    @SerializedName("date_start")
+    @SerializedName(Constants.DATE_START)
     private String dateStart;
-    @SerializedName("date_end")
+    @SerializedName(Constants.DATE_END)
     private String dateEnd;
     private double fee;
     private String location;
 
     private boolean apply;
     private boolean open;
-    @SerializedName("my_status")
+    @SerializedName(Constants.MY_STATUS)
     private boolean myStatus;
 
     public int getId() {
@@ -49,20 +53,20 @@ public class Job extends RealmObject {
         this.id = id;
     }
 
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getClassificationId() {
-        return classificationId;
+    public int getClassification() {
+        return classification;
     }
 
-    public void setClassificationId(int classificationId) {
-        this.classificationId = classificationId;
+    public void setClassification(int classification) {
+        this.classification = classification;
     }
 
     public String getClassificationTitle() {
@@ -154,7 +158,8 @@ public class Job extends RealmObject {
     }
 
     public String getJobInfo() {
-        return "Fee: Php " + fee + "\t\t" + "Duration: " + getDuration() + "\t\t" + "Posted: " + DateTimeUtils.toDuration(created);
+        return "Fee: Php " + fee + "\t\t" + "Date: " + getDuration() + "\t\t" + "Posted: "
+                + DateTimeUtils.toDuration(created);
     }
 
     public String getDuration() {

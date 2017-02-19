@@ -1,7 +1,5 @@
 package com.tip.theboss.ui.register;
 
-import android.util.Log;
-
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 import com.tip.theboss.app.App;
 import com.tip.theboss.model.data.User;
@@ -18,7 +16,6 @@ import retrofit2.Response;
  */
 
 class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
-    private static final String TAG = RegisterPresenter.class.getSimpleName();
 
     void register(String username, String email, String firstName, String lastName,
                   String password, String repeatPassword) {
@@ -41,7 +38,7 @@ class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
                                     String errorBody = response.errorBody().string();
                                     getView().showMessage(errorBody);
                                 } catch (IOException e) {
-                                    Log.e(TAG, "onClassificationReturn: Error parsing error body as string", e);
+                                    e.printStackTrace();
                                     getView().showMessage(response.message() != null ?
                                             response.message() : "Unknown Exception");
                                 }
@@ -50,7 +47,7 @@ class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Log.e(TAG, "onFailure: Error calling register api", t);
+                            t.printStackTrace();
                             getView().stopLoading();
                             getView().showMessage("Error Connecting to Server");
                         }

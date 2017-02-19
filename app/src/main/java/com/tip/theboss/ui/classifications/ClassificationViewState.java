@@ -9,7 +9,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestorableViewState;
  * Created by Cholo Mia on 2/11/2017.
  */
 
-public class ClassificationViewState implements RestorableViewState<ClassificationsView> {
+class ClassificationViewState implements RestorableViewState<ClassificationsView> {
     @Override
     public void saveInstanceState(@NonNull Bundle out) {
 

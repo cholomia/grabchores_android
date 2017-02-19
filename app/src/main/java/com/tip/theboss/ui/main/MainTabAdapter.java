@@ -14,11 +14,11 @@ import java.util.List;
  * Created by Cholo Mia on 2/11/2017.
  */
 
-public class MainTabAdapter extends FragmentStatePagerAdapter {
+class MainTabAdapter extends FragmentStatePagerAdapter {
 
     private List<Classification> classifications;
 
-    public MainTabAdapter(FragmentManager fm) {
+    MainTabAdapter(FragmentManager fm) {
         super(fm);
         classifications = new ArrayList<>();
     }

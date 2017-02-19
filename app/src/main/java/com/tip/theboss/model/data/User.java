@@ -6,11 +6,16 @@ import com.tip.theboss.app.Constants;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by Cholo Mia on 12/4/2016.
- */
 
+/**
+ * @author pocholomia
+ * @since 12/4/2016
+ */
 public class User extends RealmObject {
+
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String USER_PROFILE = "userProfile";
 
     @PrimaryKey
     private String username;

@@ -18,7 +18,7 @@ import retrofit2.Response;
  * Created by Cholo Mia on 2/11/2017.
  */
 
-public class ClassificationsPresenter extends MvpNullObjectBasePresenter<ClassificationsView> {
+class ClassificationsPresenter extends MvpNullObjectBasePresenter<ClassificationsView> {
 
     private Realm realm;
     private RealmResults<Classification> classificationRealmResults;

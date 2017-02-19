@@ -28,14 +28,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:text="Pocholo Mia"
+                android:text="@{user.fullName}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:text="pocholomia@gmail.com" />
+                android:text="@{user.email}" />
 
             <View
                 android:layout_width="match_parent"

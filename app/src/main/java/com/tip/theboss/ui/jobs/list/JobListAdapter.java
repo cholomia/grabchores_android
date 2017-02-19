@@ -3,7 +3,6 @@ package com.tip.theboss.ui.jobs.list;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.tip.theboss.R;
@@ -20,7 +19,7 @@ import java.util.List;
  * @since 26/01/2017
  */
 
-public class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_MORE = 1;
     private static final int VIEW_TYPE_DEFAULT = 0;
@@ -30,7 +29,7 @@ public class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private JobListView view;
     private List<Job> jobs;
 
-    public JobListAdapter(JobListView view) {
+    JobListAdapter(JobListView view) {
         this.view = view;
         jobs = new ArrayList<>();
     }
@@ -83,7 +82,7 @@ public class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return count;
     }
 
-    public void setNextUrl(String nextUrl) {
+    void setNextUrl(String nextUrl) {
         this.nextUrl = nextUrl;
         notifyDataSetChanged();
     }
@@ -94,15 +93,15 @@ public class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void setLoading(boolean loading) {
+    void setLoading(boolean loading) {
         this.loading = loading;
         notifyDataSetChanged();
     }
 
-    public class JobViewHolder extends RecyclerView.ViewHolder {
-        private ItemJobBinding itemJobBinding;
+    private class JobViewHolder extends RecyclerView.ViewHolder {
+        private final ItemJobBinding itemJobBinding;
 
-        public JobViewHolder(ItemJobBinding itemJobBinding) {
+        JobViewHolder(ItemJobBinding itemJobBinding) {
             super(itemJobBinding.getRoot());
             this.itemJobBinding = itemJobBinding;
         }

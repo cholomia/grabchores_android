@@ -1,7 +1,5 @@
 package com.tip.theboss.model.data;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -12,15 +10,13 @@ import io.realm.annotations.PrimaryKey;
  * @since 01/02/2017
  */
 
-public class Applicants extends RealmObject {
+public class Applicant extends RealmObject {
 
     @PrimaryKey
     private int id;
-    @SerializedName("username")
     private String username;
-    @SerializedName("job")
-    private int jobId;
-    private boolean apply;
+    private int job;
+    private boolean accept;
     private Date created;
 
     public int getId() {
@@ -39,20 +35,20 @@ public class Applicants extends RealmObject {
         this.username = username;
     }
 
-    public int getJobId() {
-        return jobId;
+    public int getJob() {
+        return job;
     }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
+    public void setJob(int job) {
+        this.job = job;
     }
 
-    public boolean isApply() {
-        return apply;
+    public boolean isAccept() {
+        return accept;
     }
 
-    public void setApply(boolean apply) {
-        this.apply = apply;
+    public void setAccept(boolean accept) {
+        this.accept = accept;
     }
 
     public Date getCreated() {

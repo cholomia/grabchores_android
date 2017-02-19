@@ -1,33 +1,42 @@
 package com.tip.theboss.ui.jobs.detail;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpActivity;
+import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
+import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.tip.theboss.R;
+import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityJobDetailBinding;
 import com.tip.theboss.model.data.Job;
+import com.tip.theboss.ui.jobs.form.JobFormActivity;
 import com.tip.theboss.ui.jobs.list.JobListActivity;
 
-public class JobDetailActivity extends MvpActivity<JobDetailView, JobDetailPresenter>
-        implements JobDetailView {
+public class JobDetailActivity extends MvpViewStateActivity<JobDetailView, JobDetailPresenter>
+        implements JobDetailView, SwipeRefreshLayout.OnRefreshListener {
 
     private ActivityJobDetailBinding binding;
     private ProgressDialog progressDialog;
+    private int jobId;
+    private boolean owner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_job_detail);
+        binding.swipeRefreshLayout.setOnRefreshListener(this);
         binding.setView(getMvpView());
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        int jobId = getIntent().getIntExtra("id", -1);
+        jobId = getIntent().getIntExtra(Constants.ID, -1);
         if (jobId == -1) {
             Toast.makeText(getApplicationContext(), "No Intent Extra Found", Toast.LENGTH_SHORT).show();
             finish();
@@ -42,10 +51,24 @@ public class JobDetailActivity extends MvpActivity<JobDetailView, JobDetailPrese
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (owner) getMenuInflater().inflate(R.menu.menu_job_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.action_edit:
+                Intent intent = new Intent(this, JobFormActivity.class);
+                intent.putExtra(Constants.ID, jobId);
+                startActivity(intent);
+                return true;
+            case R.id.action_delete:
+                presenter.deleteJob(jobId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -60,14 +83,19 @@ public class JobDetailActivity extends MvpActivity<JobDetailView, JobDetailPrese
 
     @Override
     public void onUserClick(String user) {
-
+        // TODO: 2/19/2017 start activity of user profile instead of job list posted by user
+        Intent intent = new Intent(this, JobListActivity.class);
+        intent.putExtra(Constants.HAS_SEARCH, true);
+        intent.putExtra(Constants.USERNAME, user);
+        startActivity(intent);
     }
 
     @Override
-    public void onClassificationClick(int classificationId) {
+    public void onClassificationClick(int classificationId, String classificationTitle) {
         Intent intent = new Intent(this, JobListActivity.class);
-        intent.putExtra("has_search", true);
-        intent.putExtra("classification", classificationId);
+        intent.putExtra(Constants.HAS_SEARCH, true);
+        intent.putExtra(Constants.CLASSIFICATION, classificationId);
+        intent.putExtra(Constants.CLASSIFICATION_TITLE, classificationTitle);
         startActivity(intent);
     }
 
@@ -86,7 +114,7 @@ public class JobDetailActivity extends MvpActivity<JobDetailView, JobDetailPrese
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setCancelable(false);
-            progressDialog.setMessage("Logging in...");
+            progressDialog.setMessage("Connecting...");
         }
         progressDialog.show();
     }
@@ -109,4 +137,53 @@ public class JobDetailActivity extends MvpActivity<JobDetailView, JobDetailPrese
                 .setPositiveButton("Close", null)
                 .show();
     }
+
+    @Override
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+        binding.setOwner(owner);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void stopPullLoading() {
+        binding.swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onDeleteSuccess() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Successful")
+                .setCancelable(false)
+                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        JobDetailActivity.this.finish();
+                    }
+                })
+                .show();
+    }
+
+    @NonNull
+    @Override
+    public ViewState<JobDetailView> createViewState() {
+        return new JobDetailViewState();
+    }
+
+    @Override
+    public void onNewViewStateInstance() {
+        binding.swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                binding.swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.refresh(jobId);
+    }
+
 }

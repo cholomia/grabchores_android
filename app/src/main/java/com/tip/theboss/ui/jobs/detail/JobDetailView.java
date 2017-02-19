@@ -12,7 +12,7 @@ public interface JobDetailView extends MvpView {
 
     void onUserClick(String user);
 
-    void onClassificationClick(int classificationId);
+    void onClassificationClick(int classificationId, String classificationTitle);
 
     void onApply(Job job);
 
@@ -25,4 +25,10 @@ public interface JobDetailView extends MvpView {
     void showMessage(String message);
 
     void onApplySuccess();
+
+    void setOwner(boolean owner);
+
+    void stopPullLoading();
+
+    void onDeleteSuccess();
 }

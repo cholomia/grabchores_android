@@ -13,10 +13,13 @@ import io.realm.annotations.PrimaryKey;
 
 public class UserProfile extends RealmObject {
 
+    public static final String MOBILE = "mobile";
+    public static final String CREDIT_CARD = "creditCard";
+
     @PrimaryKey
     private int id;
     private int user;
-    @SerializedName(Constants.MOBILE)
+    @SerializedName(Constants.MOBILE_NUMBER)
     private String mobile;
     @SerializedName(Constants.CREDIT_CARD)
     private int creditCard;
