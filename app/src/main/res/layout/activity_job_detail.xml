@@ -10,7 +10,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="owner"
+            name="enableApply"
             type="boolean" />
 
         <variable
@@ -53,23 +53,25 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/activity_vertical_margin"
                             android:layout_marginStart="@dimen/activity_vertical_margin"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
-                            android:orientation="horizontal">
+                            android:text="@{job.title}"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:layout_weight="1"
-                                android:text="@{job.title}"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
-
-                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/activity_vertical_margin"
+                            android:layout_marginStart="@dimen/activity_vertical_margin"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="Applied"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                            android:textColor="@color/colorAccent"
+                            android:visibility="@{job.apply ? View.VISIBLE : View.GONE}" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -267,7 +269,7 @@
                 android:onClick="@{() -> view.onApply(job)}"
                 android:text="Apply"
                 android:theme="@style/RaisedButton"
-                android:visibility="@{owner ? View.GONE : View.VISIBLE}" />
+                android:visibility="@{enableApply ? View.VISIBLE : View.GONE}" />
 
         </LinearLayout>
 

@@ -141,7 +141,7 @@ public class JobDetailActivity extends MvpViewStateActivity<JobDetailView, JobDe
     @Override
     public void setOwner(boolean owner) {
         this.owner = owner;
-        binding.setOwner(owner);
+        binding.setEnableApply(owner);
         invalidateOptionsMenu();
     }
 

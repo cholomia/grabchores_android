@@ -39,7 +39,8 @@ class JobDetailPresenter extends MvpNullObjectBasePresenter<JobDetailView> {
             public void onChange(RealmModel element) {
                 if (job.isLoaded() && job.isValid()) {
                     getView().setJob(realm.copyFromRealm(job));
-                    getView().setOwner(user.getUsername().contentEquals(job.getUsername()));
+                    getView().setOwner(!job.isApply() &&
+                            !user.getUsername().contentEquals(job.getUsername()));
                 }
             }
         });
