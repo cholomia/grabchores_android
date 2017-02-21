@@ -20,6 +20,7 @@ public class Job extends RealmObject {
     public static final String DATE_START = "dateStart";
     public static final String DATE_END = "dateEnd";
     public static final String MY_STATUS = "myStatus";
+    public static final String JOB_APPLICATION_ID = "jobApplicationId";
 
     @PrimaryKey
     private int id;
@@ -41,6 +42,8 @@ public class Job extends RealmObject {
     private String location;
 
     private boolean apply;
+    @SerializedName(Constants.JOB_APPLICATION_ID)
+    private int jobApplicationId;
     private boolean open;
     @SerializedName(Constants.MY_STATUS)
     private boolean myStatus;
@@ -139,6 +142,14 @@ public class Job extends RealmObject {
 
     public void setApply(boolean apply) {
         this.apply = apply;
+    }
+
+    public int getJobApplicationId() {
+        return jobApplicationId;
+    }
+
+    public void setJobApplicationId(int jobApplicationId) {
+        this.jobApplicationId = jobApplicationId;
     }
 
     public boolean isOpen() {

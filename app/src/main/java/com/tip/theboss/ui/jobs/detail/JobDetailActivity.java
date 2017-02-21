@@ -18,6 +18,7 @@ import com.tip.theboss.R;
 import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityJobDetailBinding;
 import com.tip.theboss.model.data.Job;
+import com.tip.theboss.ui.applicants.list.ApplicantsActivity;
 import com.tip.theboss.ui.jobs.form.JobFormActivity;
 import com.tip.theboss.ui.jobs.list.JobListActivity;
 
@@ -139,10 +140,8 @@ public class JobDetailActivity extends MvpViewStateActivity<JobDetailView, JobDe
     }
 
     @Override
-    public void setOwner(boolean owner) {
-        this.owner = owner;
-        binding.setEnableApply(owner);
-        invalidateOptionsMenu();
+    public void setEnableApply(boolean enableApply) {
+        binding.setEnableApply(enableApply);
     }
 
     @Override
@@ -162,6 +161,30 @@ public class JobDetailActivity extends MvpViewStateActivity<JobDetailView, JobDe
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onViewApplicants(Job job) {
+        Intent intent = new Intent(this, ApplicantsActivity.class);
+        intent.putExtra(Constants.JOB, job.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void setEnableViewApplicant(boolean enableViewApplicant) {
+        this.owner = enableViewApplicant;
+        binding.setEnableViewApplicants(enableViewApplicant);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCancelApplication(Job job) {
+        presenter.cancelApplication(job);
+    }
+
+    @Override
+    public void setEnableCancelApplication(boolean enableCancelApplication) {
+        binding.setEnableCancelApplication(enableCancelApplication);
     }
 
     @NonNull

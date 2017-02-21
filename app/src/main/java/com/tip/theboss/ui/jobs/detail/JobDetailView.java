@@ -26,9 +26,17 @@ public interface JobDetailView extends MvpView {
 
     void onApplySuccess();
 
-    void setOwner(boolean owner);
+    void setEnableApply(boolean enableApply);
 
     void stopPullLoading();
 
     void onDeleteSuccess();
+
+    void onViewApplicants(Job job);
+
+    void setEnableViewApplicant(boolean enableViewApplicant);
+
+    void onCancelApplication(Job job);
+
+    void setEnableCancelApplication(boolean enableCancelApplication);
 }

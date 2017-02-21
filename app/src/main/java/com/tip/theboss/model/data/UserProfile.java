@@ -13,14 +13,14 @@ import io.realm.annotations.PrimaryKey;
 
 public class UserProfile extends RealmObject {
 
-    public static final String MOBILE = "mobile";
+    public static final String MOBILE_NUMBER = "mobileNumber";
     public static final String CREDIT_CARD = "creditCard";
 
     @PrimaryKey
     private int id;
     private int user;
     @SerializedName(Constants.MOBILE_NUMBER)
-    private String mobile;
+    private String mobileNumber;
     @SerializedName(Constants.CREDIT_CARD)
     private int creditCard;
 
@@ -40,12 +40,12 @@ public class UserProfile extends RealmObject {
         this.user = user;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public int getCreditCard() {

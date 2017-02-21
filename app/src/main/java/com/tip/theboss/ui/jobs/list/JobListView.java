@@ -1,5 +1,6 @@
 package com.tip.theboss.ui.jobs.list;
 
+import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.ui.base.MoreListView;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @since 26/01/2017
  */
 
-public interface JobListView extends MoreListView {
+public interface JobListView extends MvpView, MoreListView {
     void stopLoading();
 
     void showMessage(String message);

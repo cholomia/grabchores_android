@@ -3,6 +3,7 @@ package com.tip.theboss.app;
 import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
+import com.tip.theboss.model.response.JobApplicantListResponse;
 import com.tip.theboss.model.response.JobApplicationResponse;
 import com.tip.theboss.model.response.JobListResponse;
 import com.tip.theboss.model.response.LoginResponse;
@@ -84,9 +85,19 @@ public interface ApiInterface {
     Call<ResponseBody> deleteJob(@Path(Constants.ID) int id,
                                  @Header(Constants.AUTHORIZATION) String basicAuthentication);
 
+    @GET(Endpoints.JOB_APPLICATION)
+    Call<JobApplicantListResponse> applicants(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                                              @QueryMap Map<String, String> params);
+
     @FormUrlEncoded
     @POST(Endpoints.JOB_APPLICATION)
     Call<JobApplicationResponse> apply(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                        @Field(Constants.JOB) int jobId);
+
+
+    @DELETE(Endpoints.JOB_APPLICATION_ID)
+    Call<ResponseBody> deleteApplicant(@Path(Constants.ID) int id,
+                                       @Header(Constants.AUTHORIZATION) String basicAuthentication);
+
 
 }

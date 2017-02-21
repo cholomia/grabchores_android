@@ -46,4 +46,7 @@ public class Constants {
     public static final String APPLY = "apply";
     public static final String CREATED = "created";
     public static final String SEARCH = "search";
+
+    public static final String ACCEPT = "accept";
+    public static final String JOB_APPLICATION_ID = "job_application_id";
 }

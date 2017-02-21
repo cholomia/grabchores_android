@@ -147,6 +147,7 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
     @Override
     public void stopLoading() {
         binding.swipeRefreshLayout.setRefreshing(false);
+        adapter.setLoading(false);
     }
 
     @Override

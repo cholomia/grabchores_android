@@ -14,6 +14,14 @@
             type="boolean" />
 
         <variable
+            name="enableViewApplicants"
+            type="boolean" />
+
+        <variable
+            name="enableCancelApplication"
+            type="boolean" />
+
+        <variable
             name="job"
             type="com.tip.theboss.model.data.Job" />
 
@@ -270,6 +278,23 @@
                 android:text="Apply"
                 android:theme="@style/RaisedButton"
                 android:visibility="@{enableApply ? View.VISIBLE : View.GONE}" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> view.onCancelApplication(job)}"
+                android:text="Cancel Application"
+                android:theme="@style/RaisedButton"
+                android:visibility="@{enableCancelApplication ? View.VISIBLE : View.GONE}" />
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> view.onViewApplicants(job)}"
+                android:text="View Applicants"
+                android:theme="@style/RaisedButton"
+                android:visibility="@{enableViewApplicants ? View.VISIBLE : View.GONE}" />
 
         </LinearLayout>
 

@@ -39,7 +39,11 @@ class JobDetailPresenter extends MvpNullObjectBasePresenter<JobDetailView> {
             public void onChange(RealmModel element) {
                 if (job.isLoaded() && job.isValid()) {
                     getView().setJob(realm.copyFromRealm(job));
-                    getView().setOwner(!job.isApply() &&
+                    getView().setEnableApply(!job.isApply() &&
+                            !user.getUsername().contentEquals(job.getUsername()));
+                    getView().setEnableViewApplicant(user.getUsername()
+                            .contentEquals(job.getUsername()));
+                    getView().setEnableCancelApplication(job.isApply() &&
                             !user.getUsername().contentEquals(job.getUsername()));
                 }
             }
@@ -192,6 +196,23 @@ class JobDetailPresenter extends MvpNullObjectBasePresenter<JobDetailView> {
                         t.printStackTrace();
                         getView().stopLoading();
                         getView().showMessage("Error Connecting to Server");
+                    }
+                });
+    }
+
+    void cancelApplication(Job job) {
+        getView().startLoading();
+        App.getInstance().getApiInterface().deleteApplicant(job.getJobApplicationId(),
+                Credentials.basic(user.getUsername(), user.getPassword()))
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
                     }
                 });
     }
