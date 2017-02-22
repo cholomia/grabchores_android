@@ -42,7 +42,8 @@
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:label="My Account" />
-        <activity android:name=".ui.applicants.list.ApplicantsActivity"></activity>
+        <activity android:name=".ui.applicants.list.ApplicantsActivity" />
+        <activity android:name=".ui.applicants.detail.ApplicantDetailActivity"></activity>
     </application>
 
 </manifest>

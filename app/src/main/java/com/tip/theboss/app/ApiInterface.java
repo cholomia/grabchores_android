@@ -42,6 +42,7 @@ public interface ApiInterface {
                         @Field(Constants.EMAIL) String email,
                         @Field(Constants.FIRST_NAME) String firstName,
                         @Field(Constants.LAST_NAME) String lastName,
+                        @Field(Constants.MOBILE_NUMBER) String mobileNumber,
                         @Field(Constants.PASSWORD) String password);
 
     @GET(Endpoints.CLASSIFICATIONS)

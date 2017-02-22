@@ -49,6 +49,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
                 binding.etEmail.getText().toString(),
                 binding.etFirstName.getText().toString(),
                 binding.etLastName.getText().toString(),
+                binding.etMobileNumber.getText().toString(),
                 binding.etPassword.getText().toString(),
                 binding.etRepeatPassword.getText().toString());
     }
