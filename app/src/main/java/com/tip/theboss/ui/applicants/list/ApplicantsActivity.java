@@ -30,6 +30,7 @@ public class ApplicantsActivity extends MvpViewStateActivity<ApplicantsView, App
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_applicants);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         adapter = new ApplicantsListAdapter(getMvpView());
         binding.swipeRefreshLayout.setOnRefreshListener(this);
         binding.recyclerView.setAdapter(adapter);

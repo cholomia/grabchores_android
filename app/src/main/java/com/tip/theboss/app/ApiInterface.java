@@ -1,8 +1,10 @@
 package com.tip.theboss.app;
 
+import com.tip.theboss.model.data.Applicant;
 import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
+import com.tip.theboss.model.response.ApplicantAcceptResponse;
 import com.tip.theboss.model.response.JobApplicantListResponse;
 import com.tip.theboss.model.response.JobApplicationResponse;
 import com.tip.theboss.model.response.JobListResponse;
@@ -90,10 +92,20 @@ public interface ApiInterface {
     Call<JobApplicantListResponse> applicants(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                               @QueryMap Map<String, String> params);
 
+    @GET(Endpoints.JOB_APPLICATION_ID)
+    Call<Applicant> getApplicant(@Path(Constants.ID) int id,
+                                 @Header(Constants.AUTHORIZATION) String basicAuthentication);
+
     @FormUrlEncoded
     @POST(Endpoints.JOB_APPLICATION)
     Call<JobApplicationResponse> apply(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                        @Field(Constants.JOB) int jobId);
+
+    @FormUrlEncoded
+    @PUT(Endpoints.JOB_APPLICATION_ACCEPT)
+    Call<ApplicantAcceptResponse> updateApplicant(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                                                  @Field(Constants.ID) int id,
+                                                  @Field(Constants.ACCEPT) boolean accept);
 
 
     @DELETE(Endpoints.JOB_APPLICATION_ID)

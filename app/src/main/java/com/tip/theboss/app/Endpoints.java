@@ -9,7 +9,7 @@ class Endpoints {
 
     private static final String _ID = "{id}/";
     public static final String BASE_URL = "http://grabchores.pythonanywhere.com";
-    //private static final String BASE_URL = "http://192.168.1.4:8000";
+    //private static final String BASE_URL = "http://10.3.32.203:8000";
 
     static final String API_URL = BASE_URL + "/api/";
 
@@ -21,4 +21,5 @@ class Endpoints {
     static final String CLASSIFICATIONS = "classifications/";
     static final String JOB_ID = JOBS + _ID;
     public static final String JOB_APPLICATION_ID = JOB_APPLICATION + _ID;
+    public static final String JOB_APPLICATION_ACCEPT = JOB_APPLICATION + "accept/";
 }

@@ -77,7 +77,7 @@ class ApplicantsPresenter extends MvpNullObjectBasePresenter<ApplicantsView> {
                                             if (jobId != null && !jobId.isEmpty()) {
                                                 RealmResults<Applicant> applicantRealmResults = realm
                                                         .where(Applicant.class)
-                                                        .equalTo(Constants.JOB, jobId)
+                                                        .equalTo(Constants.JOB, Integer.parseInt(jobId))
                                                         .findAll();
                                                 applicantRealmResults.deleteAllFromRealm();
                                             }
