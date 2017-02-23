@@ -21,5 +21,5 @@ class Endpoints {
     static final String CLASSIFICATIONS = "classifications/";
     static final String JOB_ID = JOBS + _ID;
     public static final String JOB_APPLICATION_ID = JOB_APPLICATION + _ID;
-    public static final String JOB_APPLICATION_ACCEPT = JOB_APPLICATION + "accept/";
+    public static final String JOB_APPLICATION_ACCEPT = "applications-accept";
 }

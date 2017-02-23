@@ -102,7 +102,7 @@ public interface ApiInterface {
                                        @Field(Constants.JOB) int jobId);
 
     @FormUrlEncoded
-    @PUT(Endpoints.JOB_APPLICATION_ACCEPT)
+    @POST(Endpoints.JOB_APPLICATION_ACCEPT)
     Call<ApplicantAcceptResponse> updateApplicant(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                                   @Field(Constants.ID) int id,
                                                   @Field(Constants.ACCEPT) boolean accept);
