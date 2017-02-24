@@ -118,9 +118,10 @@ public class JobFormActivity extends MvpActivity<JobFormView, JobFormPresenter>
                         calendar1.set(Calendar.MONTH, i1);
                         calendar1.set(Calendar.DAY_OF_MONTH, i2);
                         String dateString = DateTimeUtils.convertDateToString("MM/dd/yy", calendar1);
-                        if (view.getId() == binding.txtDateStart.getId()
-                                || binding.checkboxSingleDay.isChecked()) {
+                        if (view.getId() == binding.txtDateStart.getId()) {
                             binding.txtDateStart.setText(dateString);
+                            if (binding.checkboxSingleDay.isChecked())
+                                binding.txtDateEnd.setText(dateString);
                         } else if (view.getId() == binding.txtDateEnd.getId()
                                 || binding.checkboxSingleDay.isChecked()) {
                             binding.txtDateEnd.setText(dateString);

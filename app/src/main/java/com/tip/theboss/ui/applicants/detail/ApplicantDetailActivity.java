@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class ApplicantDetailActivity
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_applicant_detail);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        binding.setView(getMvpView());
         applicantId = getIntent().getIntExtra(Constants.ID, -1);
         if (applicantId == -1) {
             Toast.makeText(getApplicationContext(), "No Intent Extra Found", Toast.LENGTH_SHORT).show();
@@ -114,5 +115,11 @@ public class ApplicantDetailActivity
                 .setCancelable(false)
                 .setPositiveButton("Close", null)
                 .show();
+    }
+
+    @Override
+    public void setAcceptEnable(boolean acceptEnable) {
+        binding.setAcceptEnable(acceptEnable);
+        Log.d("APPLY", "onChange: accept: " + String.valueOf(acceptEnable));
     }
 }

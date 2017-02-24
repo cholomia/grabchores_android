@@ -1,9 +1,12 @@
 package com.tip.theboss.ui.applicants.detail;
 
+import android.util.Log;
+
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 import com.tip.theboss.app.App;
 import com.tip.theboss.app.Constants;
 import com.tip.theboss.model.data.Applicant;
+import com.tip.theboss.model.data.Job;
 import com.tip.theboss.model.data.User;
 import com.tip.theboss.model.response.ApplicantAcceptResponse;
 
@@ -26,22 +29,41 @@ public class ApplicantDetailPresenter extends MvpNullObjectBasePresenter<Applica
 
     private Realm realm;
     private Applicant applicant;
+    private Job job;
     private User user;
 
-    public void onStart(int applicantId) {
+    public void onStart(final int applicantId) {
         realm = Realm.getDefaultInstance();
         user = realm.where(User.class).findFirst();
         applicant = realm.where(Applicant.class).equalTo(Constants.ID, applicantId).findFirstAsync();
         applicant.addChangeListener(new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel element) {
-                if (applicant.isLoaded() && applicant.isValid())
+                if (applicant.isLoaded() && applicant.isValid()) {
                     getView().setApplicant(realm.copyFromRealm(applicant));
+                    if (job == null)
+                        loadJob();
+                }
+            }
+        });
+    }
+
+    private void loadJob() {
+        job = realm.where(Job.class).equalTo(Constants.ID, applicant.getJob())
+                .findFirstAsync();
+        job.addChangeListener(new RealmChangeListener<RealmModel>() {
+            @Override
+            public void onChange(RealmModel element) {
+                if (job.isLoaded() && job.isValid() && applicant.isLoaded() && applicant.isValid()) {
+                    Log.d("APPLY", "onChange: accept: " + String.valueOf(job.isOpen()) + " - accept: " + String.valueOf(!applicant.isAccept()));
+                    getView().setAcceptEnable(job.isOpen() && !applicant.isAccept());
+                }
             }
         });
     }
 
     public void onStop() {
+        if (job != null) job.removeChangeListeners();
         applicant.removeChangeListeners();
         realm.close();
     }
@@ -89,7 +111,7 @@ public class ApplicantDetailPresenter extends MvpNullObjectBasePresenter<Applica
     public void update(int id, boolean accept) {
         getView().startLoad();
         App.getInstance().getApiInterface().updateApplicant(
-                Credentials.basic(user.getUsername(), user.getPassword()), id, accept)
+                Credentials.basic(user.getUsername(), user.getPassword()), id, accept ? "True" : "False")
                 .enqueue(new Callback<ApplicantAcceptResponse>() {
                     @Override
                     public void onResponse(Call<ApplicantAcceptResponse> call,
@@ -106,7 +128,10 @@ public class ApplicantDetailPresenter extends MvpNullObjectBasePresenter<Applica
                                     }, new Realm.Transaction.OnSuccess() {
                                         @Override
                                         public void onSuccess() {
-                                            getView().updateSuccess(response.body().getMessage());
+                                            getView().updateSuccess(
+                                                    response.body().getApplicant().isAccept() ?
+                                                            "Job Application Accepted" :
+                                                            "Job Application Acceptance Cancelled");
                                         }
                                     }, new Realm.Transaction.OnError() {
                                         @Override

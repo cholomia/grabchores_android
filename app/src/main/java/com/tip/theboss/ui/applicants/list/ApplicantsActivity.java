@@ -1,5 +1,6 @@
 package com.tip.theboss.ui.applicants.list;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import com.tip.theboss.R;
 import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityApplicantsBinding;
 import com.tip.theboss.model.data.Applicant;
+import com.tip.theboss.ui.applicants.detail.ApplicantDetailActivity;
 import com.tip.theboss.util.StringUtils;
 
 import java.util.List;
@@ -116,7 +118,9 @@ public class ApplicantsActivity extends MvpViewStateActivity<ApplicantsView, App
 
     @Override
     public void onApplicantClick(Applicant applicant) {
-
+        Intent intent = new Intent(this, ApplicantDetailActivity.class);
+        intent.putExtra(Constants.ID, applicant.getId());
+        startActivity(intent);
     }
 
     @Override

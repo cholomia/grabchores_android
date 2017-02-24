@@ -13,6 +13,10 @@
         <variable
             name="view"
             type="com.tip.theboss.ui.applicants.detail.ApplicantDetailView" />
+
+        <variable
+            name="acceptEnable"
+            type="boolean" />
     </data>
 
     <LinearLayout
@@ -117,7 +121,7 @@
             android:onClick="@{() -> view.onAccept(applicant)}"
             android:text="Accept"
             android:theme="@style/RaisedButton"
-            android:visibility="@{applicant.accept ? View.GONE : View.VISIBLE}" />
+            android:visibility="@{acceptEnable ? View.VISIBLE : View.GONE}" />
 
         <Button
             android:layout_width="match_parent"

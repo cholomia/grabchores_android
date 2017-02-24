@@ -101,11 +101,17 @@ public interface ApiInterface {
     Call<JobApplicationResponse> apply(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                        @Field(Constants.JOB) int jobId);
 
+    /**
+     * @param basicAuthentication
+     * @param id
+     * @param accept              must be 'True' or 'False'
+     * @return
+     */
     @FormUrlEncoded
     @POST(Endpoints.JOB_APPLICATION_ACCEPT)
     Call<ApplicantAcceptResponse> updateApplicant(@Header(Constants.AUTHORIZATION) String basicAuthentication,
                                                   @Field(Constants.ID) int id,
-                                                  @Field(Constants.ACCEPT) boolean accept);
+                                                  @Field(Constants.ACCEPT) String accept);
 
 
     @DELETE(Endpoints.JOB_APPLICATION_ID)
