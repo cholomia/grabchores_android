@@ -49,4 +49,13 @@ public class Constants {
 
     public static final String ACCEPT = "accept";
     public static final String JOB_APPLICATION_ID = "job_application_id";
+
+    public static final String RATE_USERNAME = "rate_username";
+    public static final String RATE = "rate";
+    public static final String TYPE = "type";
+    public static final String COMMENT = "comment";
+    public static final int TYPE_AVAIL = 1;
+    public static final int TYPE_RENDER = 2;
+    public static final String FULL_NAME = "full_name";
+    public static final String NEW_PASSWORD = "new_" + PASSWORD;
 }

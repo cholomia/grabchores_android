@@ -21,6 +21,7 @@ import com.tip.theboss.model.data.Job;
 import com.tip.theboss.ui.applicants.list.ApplicantsActivity;
 import com.tip.theboss.ui.jobs.form.JobFormActivity;
 import com.tip.theboss.ui.jobs.list.JobListActivity;
+import com.tip.theboss.ui.poster.PosterActivity;
 
 public class JobDetailActivity extends MvpViewStateActivity<JobDetailView, JobDetailPresenter>
         implements JobDetailView, SwipeRefreshLayout.OnRefreshListener {
@@ -83,12 +84,15 @@ public class JobDetailActivity extends MvpViewStateActivity<JobDetailView, JobDe
     }
 
     @Override
-    public void onUserClick(String user) {
-        // TODO: 2/19/2017 start activity of user profile instead of job list posted by user
-        Intent intent = new Intent(this, JobListActivity.class);
-        intent.putExtra(Constants.HAS_SEARCH, true);
-        intent.putExtra(Constants.USERNAME, user);
-        startActivity(intent);
+    public void onUserClick(Job job) {
+        if (!owner) {
+            Intent intent = new Intent(this, PosterActivity.class);
+            intent.putExtra(Constants.USERNAME, job.getUsername());
+            intent.putExtra(Constants.FULL_NAME, job.getFullName());
+            intent.putExtra(Constants.EMAIL, job.getEmail());
+            intent.putExtra(Constants.MOBILE_NUMBER, job.getMobileNumber());
+            startActivity(intent);
+        }
     }
 
     @Override

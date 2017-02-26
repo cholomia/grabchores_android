@@ -24,4 +24,6 @@ public interface ApplicantDetailView extends MvpView {
     void updateSuccess(String message);
 
     void setAcceptEnable(boolean acceptEnable);
+
+    void onAddRating(Applicant applicant);
 }

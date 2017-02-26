@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -27,86 +28,122 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:text="@{user.fullName}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:text="@{user.email}" />
+                android:orientation="horizontal">
 
-            <View
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Email Address: " />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_vertical_margin"
+                    android:text="@{user.email}"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Mobile Number: " />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_vertical_margin"
+                    android:text="@{user.userProfile.mobileNumber}"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:background="@android:color/darker_gray" />
+                app:elevation="5dp"
+                app:tabBackground="@color/colorPrimaryDark"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@android:color/darker_gray" />
 
-            <Button
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:text="Jobs Posted"
-                android:textAllCaps="false" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <Button
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:text="My Applications"
-                android:textAllCaps="false" />
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/colorPrimaryDark" />
 
-            <Button
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:text="My Reviews"
-                android:textAllCaps="false" />
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:visibility="gone" />
+
+                <Button
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Change Password"
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="gone" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary" />
+
+                <Button
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> view.onUpdateInfo()}"
+                    android:text="Update Info"
+                    android:textColor="@color/colorPrimary" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <Button
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:text="Change Password"
-                android:textAllCaps="false" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <Button
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:onClick="@{() -> view.onLogout()}"
-                android:text="Logout"
-                android:textAllCaps="false" />
+                android:background="@color/colorPrimaryDark" />
 
         </LinearLayout>
-
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

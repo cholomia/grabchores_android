@@ -10,9 +10,10 @@ import com.tip.theboss.ui.base.UserView;
 
 public interface ProfileView extends UserView {
 
-    void onLogout();
-
     void setUser(User user);
 
-    void onLogoutSuccess();
+    void onChangePassword();
+
+    void onUpdateInfo();
+
 }

@@ -69,6 +69,9 @@ public class ApplicantDetailPresenter extends MvpNullObjectBasePresenter<Applica
     }
 
     public void refresh(int applicantId) {
+        if (user == null) {
+            return;
+        }
         App.getInstance().getApiInterface().getApplicant(applicantId,
                 Credentials.basic(user.getUsername(), user.getPassword()))
                 .enqueue(new Callback<Applicant>() {
@@ -110,6 +113,10 @@ public class ApplicantDetailPresenter extends MvpNullObjectBasePresenter<Applica
 
     public void update(int id, boolean accept) {
         getView().startLoad();
+        if (user == null) {
+            getView().stopLoad();
+            return;
+        }
         App.getInstance().getApiInterface().updateApplicant(
                 Credentials.basic(user.getUsername(), user.getPassword()), id, accept ? "True" : "False")
                 .enqueue(new Callback<ApplicantAcceptResponse>() {

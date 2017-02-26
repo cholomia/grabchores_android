@@ -46,6 +46,14 @@
             android:name=".ui.applicants.list.ApplicantsActivity"
             android:label="Job Applicants" />
         <activity android:name=".ui.applicants.detail.ApplicantDetailActivity" />
+        <activity android:name=".ui.rating.form.RatingFormActivity" />
+        <activity
+            android:name=".ui.profile.form.ProfileFormActivity"
+            android:label="Update Profile" />
+        <activity android:name=".ui.profile.change.ChangePasswordActivity" />
+        <activity
+            android:name=".ui.poster.PosterActivity"
+            android:label="Account Detail" />
     </application>
 
 </manifest>

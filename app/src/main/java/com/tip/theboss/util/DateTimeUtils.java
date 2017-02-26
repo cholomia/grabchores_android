@@ -61,6 +61,11 @@ public class DateTimeUtils {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(date);
     }
 
+    public static String getDateTimeString(Date date, String format) {
+        if (date == null) return "";
+        return new SimpleDateFormat(format, Locale.US).format(date);
+    }
+
     public static Calendar convertTransactionStringDate(String dateString, String format) {
         Date date = convertStringDate(dateString, format);
         if (date == null) return null;

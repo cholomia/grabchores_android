@@ -48,6 +48,14 @@ public class Job extends RealmObject {
     @SerializedName(Constants.MY_STATUS)
     private boolean myStatus;
 
+    private String email;
+    @SerializedName(Constants.MOBILE_NUMBER)
+    private String mobileNumber;
+    @SerializedName(Constants.FIRST_NAME)
+    private String firstName;
+    @SerializedName(Constants.LAST_NAME)
+    private String lastName;
+
     public int getId() {
         return id;
     }
@@ -177,4 +185,39 @@ public class Job extends RealmObject {
         return dateStart.contentEquals(dateEnd) ? dateStart : dateStart + "-" + dateEnd;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

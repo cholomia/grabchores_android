@@ -2,11 +2,12 @@ package com.tip.theboss.ui.applicants.list;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -39,6 +40,16 @@ public class ApplicantsActivity extends MvpViewStateActivity<ApplicantsView, App
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
+
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                binding.swipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+            }
+        });
 
         int jobId = getIntent().getIntExtra(Constants.JOB, -1);
         if (jobId == -1) {

@@ -1,11 +1,14 @@
 package com.tip.theboss.ui.applicants.detail;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +19,8 @@ import com.tip.theboss.R;
 import com.tip.theboss.app.Constants;
 import com.tip.theboss.databinding.ActivityApplicantDetailBinding;
 import com.tip.theboss.model.data.Applicant;
+import com.tip.theboss.ui.rating.form.RatingFormActivity;
+import com.tip.theboss.ui.rating.list.RatingListFragment;
 
 public class ApplicantDetailActivity
         extends MvpViewStateActivity<ApplicantDetailView, ApplicantDetailPresenter>
@@ -24,6 +29,7 @@ public class ApplicantDetailActivity
     private ActivityApplicantDetailBinding binding;
     private int applicantId;
     private ProgressDialog progressDialog;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,9 @@ public class ApplicantDetailActivity
             Toast.makeText(getApplicationContext(), "No Intent Extra Found", Toast.LENGTH_SHORT).show();
             finish();
         }
+        fragmentManager = getSupportFragmentManager();
         presenter.onStart(applicantId);
+
     }
 
     @Override
@@ -76,6 +84,9 @@ public class ApplicantDetailActivity
     @Override
     public void setApplicant(Applicant applicant) {
         binding.setApplicant(applicant);
+        changeFragment(RatingListFragment.newInstance(Constants.TYPE_RENDER, applicant.getUsername()),
+                RatingListFragment.class.getSimpleName(),
+                false);
     }
 
     @Override
@@ -121,5 +132,23 @@ public class ApplicantDetailActivity
     public void setAcceptEnable(boolean acceptEnable) {
         binding.setAcceptEnable(acceptEnable);
         Log.d("APPLY", "onChange: accept: " + String.valueOf(acceptEnable));
+    }
+
+    @Override
+    public void onAddRating(Applicant applicant) {
+        Intent intent = new Intent(this, RatingFormActivity.class);
+        intent.putExtra(Constants.RATE_USERNAME, applicant.getUsername());
+        intent.putExtra(Constants.FULL_NAME, applicant.getFullName());
+        intent.putExtra(Constants.TYPE, Constants.TYPE_RENDER);
+        startActivity(intent);
+    }
+
+    public void changeFragment(Fragment fragment, String tag, boolean addToBackStack) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.layout_reviews, fragment, tag);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        if (addToBackStack)
+            fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
     }
 }

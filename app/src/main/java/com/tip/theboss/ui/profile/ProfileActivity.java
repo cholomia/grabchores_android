@@ -5,13 +5,15 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.tip.theboss.R;
 import com.tip.theboss.databinding.ActivityProfileBinding;
 import com.tip.theboss.model.data.User;
-import com.tip.theboss.ui.login.LoginActivity;
+import com.tip.theboss.ui.profile.change.ChangePasswordActivity;
+import com.tip.theboss.ui.profile.form.ProfileFormActivity;
 
 
 public class ProfileActivity extends MvpActivity<ProfileView, ProfilePresenter>
@@ -23,6 +25,7 @@ public class ProfileActivity extends MvpActivity<ProfileView, ProfilePresenter>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         binding.setView(getMvpView());
         binding.swipeRefreshLayout.setOnRefreshListener(this);
         presenter.onStart();
@@ -32,6 +35,17 @@ public class ProfileActivity extends MvpActivity<ProfileView, ProfilePresenter>
     protected void onDestroy() {
         presenter.onStop();
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @NonNull
@@ -46,19 +60,21 @@ public class ProfileActivity extends MvpActivity<ProfileView, ProfilePresenter>
     }
 
     @Override
-    public void onLogout() {
-        presenter.deleteAll();
-    }
-
-    @Override
     public void setUser(User user) {
         binding.setUser(user);
+        ProfileTabAdapter tabAdapter = new ProfileTabAdapter(getSupportFragmentManager(), user.getUsername());
+        binding.viewPager.setAdapter(tabAdapter);
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
     @Override
-    public void onLogoutSuccess() {
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+    public void onChangePassword() {
+        startActivity(new Intent(this, ChangePasswordActivity.class));
+    }
+
+    @Override
+    public void onUpdateInfo() {
+        startActivity(new Intent(this, ProfileFormActivity.class));
     }
 
     @Override

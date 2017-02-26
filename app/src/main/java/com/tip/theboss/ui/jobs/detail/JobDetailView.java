@@ -10,7 +10,7 @@ import com.tip.theboss.model.data.Job;
 
 public interface JobDetailView extends MvpView {
 
-    void onUserClick(String user);
+    void onUserClick(Job job);
 
     void onClassificationClick(int classificationId, String classificationTitle);
 

@@ -22,4 +22,8 @@ class Endpoints {
     static final String JOB_ID = JOBS + _ID;
     public static final String JOB_APPLICATION_ID = JOB_APPLICATION + _ID;
     public static final String JOB_APPLICATION_ACCEPT = "applications-accept/";
+    public static final String RATINGS = "ratings/";
+    public static final String RATINGS_ID = RATINGS + _ID;
+    public static final String PROFILE_UPDATE = "profile-update/";
+    public static final String CHANGE_PASSWORD = "user/change-password/";
 }

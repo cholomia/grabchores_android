@@ -39,10 +39,4 @@ class ProfilePresenter extends UserPresenter<ProfileView> {
             login(user.getUsername(), user.getPassword());
     }
 
-    void deleteAll() {
-        realm.beginTransaction();
-        realm.deleteAll();
-        realm.commitTransaction();
-        getView().onLogoutSuccess();
-    }
 }

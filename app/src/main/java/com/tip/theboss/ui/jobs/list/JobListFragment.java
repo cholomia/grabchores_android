@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,6 +87,15 @@ public class JobListFragment extends MvpViewStateFragment<JobListView, JobListPr
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                binding.swipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+            }
+        });
         return binding.getRoot();
     }
 

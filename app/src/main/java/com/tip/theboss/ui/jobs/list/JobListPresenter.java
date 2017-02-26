@@ -46,7 +46,8 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
         user = realm.where(User.class).findFirst();
         jobRealmResults = realm.where(Job.class).findAllSorted(Constants.CREATED, Sort.DESCENDING);
         if (classification != -1)
-            jobRealmResults = jobRealmResults.where().equalTo(Constants.CLASSIFICATION, classification)
+            jobRealmResults = jobRealmResults.where()
+                    .equalTo(Constants.CLASSIFICATION, classification)
                     .findAllSorted(Constants.CREATED, Sort.DESCENDING);
         if (username != null && !username.isEmpty())
             jobRealmResults = jobRealmResults.where().equalTo(Constants.USERNAME, username)
@@ -109,12 +110,14 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
     private void load(final Call<JobListResponse> jobListResponseCall) {
         jobListResponseCall.enqueue(new Callback<JobListResponse>() {
             @Override
-            public void onResponse(Call<JobListResponse> call, final Response<JobListResponse> response) {
+            public void onResponse(Call<JobListResponse> call,
+                                   final Response<JobListResponse> response) {
                 getView().stopLoading();
                 if (response.isSuccessful()) {
 
                     final String search = call.request().url().queryParameter(Constants.SEARCH);
-                    final String classification = call.request().url().queryParameter(Constants.CLASSIFICATION);
+                    final String classification = call.request().url()
+                            .queryParameter(Constants.CLASSIFICATION);
                     final String username = call.request().url().queryParameter(Constants.USERNAME);
                     final String open = call.request().url().queryParameter(Constants.OPEN);
 
@@ -130,7 +133,8 @@ class JobListPresenter extends MvpNullObjectBasePresenter<JobListView> {
                                         jobRealmResults = jobRealmResults.where()
                                                 .contains(Constants.TITLE, search, Case.INSENSITIVE)
                                                 .or()
-                                                .contains(Constants.DESCRIPTION, search, Case.INSENSITIVE)
+                                                .contains(Constants.DESCRIPTION, search,
+                                                        Case.INSENSITIVE)
                                                 .findAll();
                                     if (classification != null)
                                         jobRealmResults = jobRealmResults.where()

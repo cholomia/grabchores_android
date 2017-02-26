@@ -3,12 +3,16 @@ package com.tip.theboss.app;
 import com.tip.theboss.model.data.Applicant;
 import com.tip.theboss.model.data.Classification;
 import com.tip.theboss.model.data.Job;
+import com.tip.theboss.model.data.Rating;
 import com.tip.theboss.model.data.User;
 import com.tip.theboss.model.response.ApplicantAcceptResponse;
+import com.tip.theboss.model.response.BasicResponse;
 import com.tip.theboss.model.response.JobApplicantListResponse;
 import com.tip.theboss.model.response.JobApplicationResponse;
 import com.tip.theboss.model.response.JobListResponse;
 import com.tip.theboss.model.response.LoginResponse;
+import com.tip.theboss.model.response.ProfileUpdateResponse;
+import com.tip.theboss.model.response.RatingListResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -118,5 +122,34 @@ public interface ApiInterface {
     Call<ResponseBody> deleteApplicant(@Path(Constants.ID) int id,
                                        @Header(Constants.AUTHORIZATION) String basicAuthentication);
 
+
+    @GET(Endpoints.RATINGS)
+    Call<RatingListResponse> ratings(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                                     @QueryMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST(Endpoints.RATINGS)
+    Call<Rating> createRating(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                              @Field(Constants.RATE_USERNAME) String rateUsername,
+                              @Field(Constants.RATE) int rate,
+                              @Field(Constants.TYPE) int type,
+                              @Field(Constants.COMMENT) String comment);
+
+    @DELETE(Endpoints.RATINGS_ID)
+    Call<ResponseBody> deleteRating(@Path(Constants.ID) int id,
+                                    @Header(Constants.AUTHORIZATION) String basicAuthentication);
+
+    @FormUrlEncoded
+    @POST(Endpoints.PROFILE_UPDATE)
+    Call<ProfileUpdateResponse> updateProfile(@Header(Constants.AUTHORIZATION) String basicAuthentication,
+                                              @Field(Constants.FIRST_NAME) String firstName,
+                                              @Field(Constants.LAST_NAME) String lastName,
+                                              @Field(Constants.MOBILE_NUMBER) String mobileNumber);
+
+    @FormUrlEncoded
+    @POST(Endpoints.CHANGE_PASSWORD)
+    Call<BasicResponse> changePassword(@Field(Constants.USERNAME) String username,
+                                       @Field(Constants.PASSWORD) String password,
+                                       @Field(Constants.NEW_PASSWORD) String newPassword);
 
 }
